@@ -5,16 +5,13 @@ datasource db {
 
 generator client {
     provider = "prisma-client-js"
-    output   = "./node_modules/@prisma/client"
+    output   = "../node_modules/@prisma/client"
 }
 
 model Category {
-    id          Int       @id @default(autoincrement())
-    name        String    @unique
-    description String?
-    products    Product[]
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
+    id       Int       @id @default(autoincrement())
+    name     String    @unique
+    products Product[]
 }
 
 model Product {
