@@ -1,13 +1,15 @@
 version: "3.8"
+
 services:
   postgres:
-    image: postgres:17
+    image: postgres:latest
+    container_name: o2_database
     environment:
       POSTGRES_USER: o2admin
-      POSTGRES_PASSWORD: pass:o1o2
+      POSTGRES_PASSWORD: passo2
       POSTGRES_DB: o2db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
