@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { MovementsModule } from './movements/movements.module';
-import { PrismaService } from './prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CategoriesController } from './categories/categories.controller';
 import { CategoriesService } from './categories/categories.service';
 import { CategoriesModule } from './categories/categories.module';
