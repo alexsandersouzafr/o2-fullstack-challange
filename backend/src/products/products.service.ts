@@ -44,23 +44,37 @@ export class ProductsService {
     return this.prisma.product.delete({ where: { id } });
   }
 
-  async getStockTotals() {
+  async getStockTotals(startDate?: Date, endDate?: Date) {
     const products = await this.prisma.product.findMany({
-      select: { unitPrice: true, stock: true },
+      where: { stock: { gt: 0 } },
     });
+
     const movements = await this.prisma.movement.findMany({
-      where: { type: 'EXIT' },
-      select: { quantity: true, totalValue: true },
+      where: {
+        type: 'EXIT',
+        date: {
+          gte: startDate ? startDate : '01-01-1900',
+          lte: endDate ? endDate : '01-01-3000',
+        },
+      },
+      select: {
+        quantity: true,
+        totalValue: true,
+        date: true,
+        product: true,
+      },
     });
 
     const totalStockValue = products.reduce(
       (total, product) => total + product.unitPrice * product.stock,
       0,
     );
+
     const totalItemsSold = movements.reduce(
       (total, movement) => total + movement.quantity,
       0,
     );
+
     const totalSales = movements.reduce(
       (total, movement) => total + movement.totalValue,
       0,
@@ -70,14 +84,14 @@ export class ProductsService {
       totalStockValue,
       totalItemsSold,
       totalSales,
+      period: startDate && endDate ? { startDate, endDate } : undefined,
     };
   }
 
   async getTopProducts(limit: number = 5) {
-    // IDs dos produtos mais movimentados
     const mostMovedProductIds = await this.prisma.product.findMany({
       select: { id: true },
-      take: limit,
+      take: Number(limit),
       orderBy: {
         movements: {
           _count: 'desc',
@@ -85,7 +99,6 @@ export class ProductsService {
       },
     });
 
-    // Detalhes das movimentações
     const productsWithDetails = await Promise.all(
       mostMovedProductIds.map(async ({ id }) => {
         const product = await this.prisma.product.findUnique({
@@ -115,7 +128,6 @@ export class ProductsService {
           { entryCount: 0, exitCount: 0, entryTotal: 0, exitTotal: 0 },
         );
 
-        //retorna produto,totalCount,entryCount,exitCount,entryTotal,exitTotal,netTotal
         return {
           ...product,
           movementStats: {

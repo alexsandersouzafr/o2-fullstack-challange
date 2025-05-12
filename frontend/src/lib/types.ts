@@ -29,6 +29,12 @@ export interface StockTotals {
   totalStockValue: number;
   totalItemsSold: number;
   totalSales: number;
+  period:
+    | {
+        startDate: Date;
+        endDate: Date;
+      }
+    | undefined;
 }
 
 export interface TopProduct extends Product {

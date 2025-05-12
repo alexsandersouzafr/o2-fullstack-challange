@@ -4,31 +4,38 @@ import { DatePickerWithRange } from "@/components/date-picker-with-range";
 import { ProductFilter } from "./product-filter";
 import TopProducts from "./top-products";
 import { Chart } from "./chart";
-
-const metricas = [
-  {
-    title: "Total de vendas",
-    value: "R$ 875.63",
-    icon: <BadgeDollarSign strokeWidth={1.5} size={44} />,
-  },
-  {
-    title: "Valor do estoque",
-    value: "R$ 56.789,63",
-    icon: <Layers strokeWidth={1.5} size={44} />,
-  },
-  {
-    title: "Total de ítens vendidos",
-    value: "69",
-    icon: <PackageCheck strokeWidth={1.5} size={44} />,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getStockTotals } from "@/lib/api";
+import { currencyFormatter } from "@/lib/utils";
 
 export default function Dashboard() {
+  const { data: metrics } = useQuery({
+    queryKey: ["darboardMetrics"],
+    queryFn: () => getStockTotals(),
+  });
+
+  const metricas = [
+    {
+      title: "Total de vendas",
+      value: String(currencyFormatter(metrics?.totalSales || 0)),
+      icon: <BadgeDollarSign strokeWidth={1.5} size={44} />,
+    },
+    {
+      title: "Valor do estoque",
+      value: String(currencyFormatter(metrics?.totalStockValue || 0)),
+      icon: <Layers strokeWidth={1.5} size={44} />,
+    },
+    {
+      title: "Total de ítens vendidos",
+      value: String(metrics?.totalItemsSold || 0),
+      icon: <PackageCheck strokeWidth={1.5} size={44} />,
+    },
+  ];
+
   return (
     <div className="p-4 border rounded-lg flex flex-col gap-8 w-full">
       <div className="flex justify-between items-center">
         <h1 className="text-5xl font-bold">DASHBOARD</h1>
-
         <div className="flex gap-8">
           <DatePickerWithRange />
           <ProductFilter />

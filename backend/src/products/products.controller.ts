@@ -26,7 +26,7 @@ export class ProductsController {
     return this.productService.getStockTotals();
   }
 
-  @Get('top-products/')
+  @Get('top-products')
   getTopProducts(@Query('limit') limit: number) {
     return this.productService.getTopProducts(limit);
   }

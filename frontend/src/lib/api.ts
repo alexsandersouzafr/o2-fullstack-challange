@@ -1,6 +1,6 @@
 import type { MovementsResponse, StockTotals } from "./types";
 
-const API = process.env.API_URL;
+const API = import.meta.env.VITE_API_URL;
 
 export async function getStockTotals(): Promise<StockTotals> {
   const res = await fetch(API + "/products/stock-totals");
@@ -15,7 +15,10 @@ export async function getAllProducts() {
 }
 
 export async function getTopProducts(limit: number) {
-  const res = await fetch(API + "/products/top-products?limit=" + { limit });
+  const res = await fetch(API + "/products/top-products?limit=" + limit);
+  if (!res.ok) {
+    throw new Error("Erro ao recuperar lista de produtos.");
+  }
   const data = await res.json();
   return data;
 }
