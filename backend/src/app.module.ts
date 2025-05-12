@@ -7,10 +7,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CategoriesController } from './categories/categories.controller';
 import { CategoriesService } from './categories/categories.service';
 import { CategoriesModule } from './categories/categories.module';
-import { ReportsModule } from './reports/reports.module';
 
 @Module({
-  imports: [ProductsModule, MovementsModule, CategoriesModule, ReportsModule],
+  imports: [ProductsModule, MovementsModule, CategoriesModule],
   controllers: [AppController, CategoriesController],
   providers: [AppService, PrismaService, CategoriesService],
 })
