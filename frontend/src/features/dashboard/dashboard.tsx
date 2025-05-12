@@ -3,7 +3,7 @@ import MetricCard from "./metric-card";
 import { DatePickerWithRange } from "@/components/date-picker-with-range";
 import { ProductFilter } from "./product-filter";
 import TopProducts from "./top-products";
-import Chart from "./chart";
+import { Chart } from "./chart";
 
 const metricas = [
   {
