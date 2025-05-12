@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreateProducDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -18,6 +19,16 @@ export class ProductsController {
   @Get()
   findAll() {
     return this.productService.findAll();
+  }
+
+  @Get('stock-totals')
+  getStockTotals() {
+    return this.productService.getStockTotals();
+  }
+
+  @Get('top-products/:limit')
+  getTopProducts(@Query('limit') limit: number) {
+    return this.productService.getTopProducts(limit);
   }
 
   @Post()

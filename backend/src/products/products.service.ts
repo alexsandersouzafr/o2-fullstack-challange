@@ -43,4 +43,72 @@ export class ProductsService {
     }
     return this.prisma.product.delete({ where: { id } });
   }
+
+  async getStockTotals() {
+    const products = await this.prisma.product.findMany({
+      select: { unitPrice: true, stock: true },
+    });
+
+    return products.reduce(
+      (total, products) => total + products.unitPrice * products.stock,
+      0,
+    );
+  }
+
+  async getTopProducts(limit: number = 5) {
+    // IDs dos produtos mais movimentados
+    const mostMovedProductIds = await this.prisma.product.findMany({
+      select: { id: true },
+      take: limit,
+      orderBy: {
+        movements: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    // Detalhes das movimentações
+    const productsWithDetails = await Promise.all(
+      mostMovedProductIds.map(async ({ id }) => {
+        const product = await this.prisma.product.findUnique({
+          where: { id },
+          include: {
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        });
+
+        const movementStats = await this.prisma.movement.groupBy({
+          by: ['type'],
+          where: { productId: id },
+          _count: { _all: true },
+          _sum: { totalValue: true },
+        });
+
+        const stats = movementStats.reduce(
+          (acc, curr) => {
+            acc[curr.type.toLowerCase() + 'Count'] = curr._count._all;
+            acc[curr.type.toLowerCase() + 'Total'] = curr._sum.totalValue;
+            return acc;
+          },
+          { entryCount: 0, exitCount: 0, entryTotal: 0, exitTotal: 0 },
+        );
+
+        //retorna produto,totalCount,entryCount,exitCount,entryTotal,exitTotal,netTotal
+        return {
+          ...product,
+          movementStats: {
+            totalCount: stats.entryCount + stats.exitCount,
+            ...stats,
+            netTotal: stats.entryTotal - stats.exitTotal,
+          },
+        };
+      }),
+    );
+
+    return productsWithDetails;
+  }
 }

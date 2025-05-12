@@ -28,10 +28,11 @@ model Product {
 }
 
 model Movement {
-    id        Int      @id @default(autoincrement())
-    productId Int
-    product   Product  @relation(fields: [productId], references: [id])
-    quantity  Int
-    type      String // "ENTRY" ou "EXIT"
-    date      DateTime @default(now())
+    id         Int      @id @default(autoincrement())
+    productId  Int
+    product    Product  @relation(fields: [productId], references: [id])
+    quantity   Int
+    totalValue Float
+    type       String // "ENTRY" ou "EXIT"
+    date       DateTime @default(now())
 }

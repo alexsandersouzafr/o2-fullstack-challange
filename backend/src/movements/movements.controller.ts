@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { MovementsService } from './movements.service';
 import { CreateMovementDto } from './dto/create-movement.dto';
 
@@ -11,8 +11,12 @@ export class MovementsController {
     return this.movementsService.create(createMovementDto);
   }
 
-  @Get(':id')
-  findMany(@Param('id') id: number) {
-    return this.movementsService.findMany(id);
+  @Get()
+  findMany(
+    @Query('id') id: number,
+    @Query('startDate') startDate: Date,
+    @Query('endDate') endDate: Date,
+  ) {
+    return this.movementsService.findMany(id, startDate, endDate);
   }
 }

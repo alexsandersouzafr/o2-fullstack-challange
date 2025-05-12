@@ -31,7 +31,7 @@ export class MovementsService {
 
     return this.prisma.$transaction(async (prisma) => {
       const stockUpdate = type === 'ENTRY' ? quantity : -quantity;
-      await prisma.product.update({
+      await this.prisma.product.update({
         where: { id: productId },
         data: { stock: { increment: stockUpdate } },
       });
@@ -40,13 +40,56 @@ export class MovementsService {
         data: {
           productId,
           quantity,
+          totalValue: product.unitPrice * quantity,
           type,
         },
       });
     });
   }
 
-  async findMany(id: number) {
-    return this.prisma.movement.findMany({ where: { id } });
+  async findMany(id: number, startDate: Date, endDate: Date) {
+    const movements = await this.prisma.movement.findMany({
+      where: {
+        ...(id !== undefined && { id }),
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      include: { product: true },
+      orderBy: {
+        date: 'desc',
+      },
+    });
+
+    const totals = await this.prisma.movement.groupBy({
+      by: ['type'],
+      where: {
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      _sum: {
+        totalValue: true,
+      },
+    });
+
+    const entryTotal =
+      Number(
+        totals.find((movement) => movement.type === 'ENTRY')?._sum?.totalValue,
+      ) || 0;
+    const exitTotal =
+      Number(
+        totals.find((movement) => movement.type === 'EXIT')?._sum?.totalValue,
+      ) || 0;
+
+    return {
+      movements,
+      totals: {
+        entry: entryTotal,
+        exit: exitTotal,
+      },
+    };
   }
 }
