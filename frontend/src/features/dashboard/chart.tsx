@@ -41,7 +41,7 @@ const chartConfig = {
 
 export function Chart() {
   return (
-    <Card className="w-2/3">
+    <Card className="w-[70%]">
       <CardHeader>
         <CardTitle>Vendas</CardTitle>
         <CardDescription>
@@ -49,7 +49,7 @@ export function Chart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ChartContainer config={chartConfig} className="h-48 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart accessibilityLayer data={chartData}>
               <CartesianGrid vertical={false} />
@@ -75,18 +75,18 @@ export function Chart() {
           </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter>
+      <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              Período selecionado.
             </div>
           </div>
         </div>
-      </CardFooter> */}
+      </CardFooter>
     </Card>
   );
 }

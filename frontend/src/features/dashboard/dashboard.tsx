@@ -27,18 +27,16 @@ export default function Dashboard() {
   return (
     <div className="p-4 border rounded-lg flex flex-col gap-8 w-full">
       <div className="flex justify-between items-center">
-        <div className="flex justify-between gap-4 items-center">
-          {/* <GaugeCircle size={44} /> */}
-          <h1 className="text-5xl font-bold">DASHBOARD</h1>
-        </div>
-        <div className="flex gap-4">
+        <h1 className="text-5xl font-bold">DASHBOARD</h1>
+
+        <div className="flex gap-8">
           <DatePickerWithRange />
           <ProductFilter />
         </div>
       </div>
       <div className="flex gap-8">
         <div className="flex flex-col gap-8 w-full">
-          <div className="flex gap-4 w-full">
+          <div className="flex gap-8 w-full">
             {metricas.map((item, index) => (
               <MetricCard
                 {...item}
@@ -47,10 +45,12 @@ export default function Dashboard() {
               />
             ))}
           </div>
-          <Chart />
+          <div className="flex gap-8 w-full">
+            <Chart />
+            <TopProducts />
+          </div>
         </div>
       </div>
-      <TopProducts />
     </div>
   );
 }
