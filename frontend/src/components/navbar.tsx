@@ -22,7 +22,7 @@ export default function Navbar() {
         </Button>
       </div>
       <div className="flex gap-4 rounded-lg bg-background text-primary py-2 px-4 items-center">
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" className="px-5">
           <Sparkles
             className="h-[1.2rem] w-[1.2rem] transition-all"
             strokeWidth={1.5}

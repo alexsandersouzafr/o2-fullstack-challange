@@ -5,7 +5,7 @@ export default function Welcome() {
     locale: ptBR,
   });
   return (
-    <div className="rounded-lg border bg-primary text-primary-foreground p-4 flex justify-between items-center text-xl">
+    <div className="flex justify-between items-center ">
       <div>
         <strong>Bem-vindo Usuário!</strong> Hoje é dia {formattedDate}.
       </div>
