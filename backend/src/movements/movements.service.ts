@@ -47,10 +47,10 @@ export class MovementsService {
     });
   }
 
-  async findMany(id: number, startDate: Date, endDate: Date) {
+  async findMany(productId: number, startDate: Date, endDate: Date) {
     const movements = await this.prisma.movement.findMany({
       where: {
-        ...(id !== undefined && { id }),
+        ...(productId !== undefined && { productId }),
         date: {
           gte: startDate,
           lte: endDate,
@@ -65,6 +65,7 @@ export class MovementsService {
     const totals = await this.prisma.movement.groupBy({
       by: ['type'],
       where: {
+        ...(productId !== undefined && { productId }),
         date: {
           gte: startDate,
           lte: endDate,
@@ -72,6 +73,7 @@ export class MovementsService {
       },
       _sum: {
         totalValue: true,
+        quantity: true,
       },
     });
 
@@ -83,12 +85,17 @@ export class MovementsService {
       Number(
         totals.find((movement) => movement.type === 'EXIT')?._sum?.totalValue,
       ) || 0;
+    const totalItemsSold =
+      Number(
+        totals.find((movement) => movement.type === 'EXIT')?._sum?.quantity,
+      ) || 0;
 
     return {
       movements,
       totals: {
         entry: entryTotal,
         exit: exitTotal,
+        totalItemsSold,
       },
     };
   }

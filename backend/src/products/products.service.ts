@@ -48,11 +48,29 @@ export class ProductsService {
     const products = await this.prisma.product.findMany({
       select: { unitPrice: true, stock: true },
     });
+    const movements = await this.prisma.movement.findMany({
+      where: { type: 'EXIT' },
+      select: { quantity: true, totalValue: true },
+    });
 
-    return products.reduce(
-      (total, products) => total + products.unitPrice * products.stock,
+    const totalStockValue = products.reduce(
+      (total, product) => total + product.unitPrice * product.stock,
       0,
     );
+    const totalItemsSold = movements.reduce(
+      (total, movement) => total + movement.quantity,
+      0,
+    );
+    const totalSales = movements.reduce(
+      (total, movement) => total + movement.totalValue,
+      0,
+    );
+
+    return {
+      totalStockValue,
+      totalItemsSold,
+      totalSales,
+    };
   }
 
   async getTopProducts(limit: number = 5) {
