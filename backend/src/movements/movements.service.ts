@@ -47,7 +47,11 @@ export class MovementsService {
     });
   }
 
-  async findMany(productId: number, startDate: Date, endDate: Date) {
+  async findMany(
+    productId: number | undefined,
+    startDate: Date,
+    endDate: Date,
+  ) {
     const movements = await this.prisma.movement.findMany({
       where: {
         ...(productId !== undefined && { productId }),

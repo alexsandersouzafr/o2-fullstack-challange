@@ -13,10 +13,10 @@ export class MovementsController {
 
   @Get()
   findMany(
-    @Query('id') id: number,
+    @Query('productId') productId: number,
     @Query('startDate') startDate: Date,
     @Query('endDate') endDate: Date,
   ) {
-    return this.movementsService.findMany(id, startDate, endDate);
+    return this.movementsService.findMany(productId, startDate, endDate);
   }
 }
