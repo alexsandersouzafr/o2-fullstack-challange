@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getTopProducts } from "@/lib/api";
 import type { Product } from "@/lib/types";
@@ -17,7 +18,7 @@ export default function TopProducts() {
   });
 
   return (
-    <div className="border rounded-lg p-4 w-1/3 flex flex-col gap-4">
+    <Card className="border rounded-lg p-4 w-1/3 flex flex-col gap-4">
       <div className="flex gap-2 items-center font-bold">
         <Package strokeWidth={1.5} /> Produtos Mais Vendidos
       </div>
@@ -48,6 +49,6 @@ export default function TopProducts() {
           ))}
       </ul>
       {error && "ERRO"}
-    </div>
+    </Card>
   );
 }
