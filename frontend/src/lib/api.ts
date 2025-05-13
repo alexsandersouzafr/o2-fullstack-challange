@@ -92,16 +92,25 @@ export async function createStockMovement(movement: {
 }
 
 export async function getMovements(
-  productId: number | undefined,
-  startDate: Date,
-  endDate: Date
+  productId?: number | undefined,
+  startDate?: Date,
+  endDate?: Date
 ): Promise<MovementsResponse> {
-  const res = await fetch(
-    API +
-      `/movements?${
-        productId ? "productId=" : ""
-      }${productId}&startDate=${startDate}&endDate=${endDate}`
-  );
+  const params = new URLSearchParams();
+
+  if (productId !== undefined && productId !== null) {
+    params.append("productId", String(productId));
+  }
+
+  if (startDate) {
+    params.append("startDate", new Date(startDate).toISOString());
+  }
+
+  if (endDate) {
+    params.append("endDate", new Date(endDate).toISOString());
+  }
+
+  const res = await fetch(API + `/movements?` + params.toString());
   const data = await res.json();
   return data;
 }

@@ -1,12 +1,12 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import {
   Area,
   AreaChart,
   CartesianGrid,
   ResponsiveContainer,
-  XAxis,
+  Tooltip,
 } from "recharts";
 
 import {
@@ -17,76 +17,93 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { useQuery } from "@tanstack/react-query";
+import { getMovements } from "@/lib/api";
+import { useMemo } from "react";
 
 const chartConfig = {
   desktop: {
-    label: "Desktop",
+    label: "Movimentação De Estoque",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
 export function Chart() {
-  return (
-    <Card className="w-[70%]">
-      <CardHeader>
-        <CardTitle>Vendas</CardTitle>
-        <CardDescription>
-          Mostrando gráficos de vendas no período selecionado.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="h-48 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={(value) => value.slice(0, 3)}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="line" />}
-              />
-              <Area
-                dataKey="desktop"
-                type="natural"
-                fill="var(--color-desktop)"
-                fillOpacity={0.4}
-                stroke="var(--color-desktop)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Período selecionado.
+  const { data, error } = useQuery({
+    queryKey: ["movements"],
+    queryFn: () => getMovements(),
+  });
+
+  const chartData = useMemo(() => {
+    if (!data?.movements) return [];
+
+    return data.movements
+      .map((movement) => ({
+        ...movement,
+        dateTime: new Date(movement.date).toLocaleString(),
+        entry: movement.type === "ENTRY" ? movement.quantity : 0,
+        exit: movement.type === "EXIT" ? movement.quantity : 0,
+      }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [data]);
+
+  if (!error)
+    return (
+      <Card className="w-[70%]">
+        <CardHeader>
+          <CardTitle>Vendas</CardTitle>
+          <CardDescription>
+            Mostrando gráficos de vendas no período selecionado.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer config={chartConfig} className="h-52 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart accessibilityLayer data={chartData}>
+                <CartesianGrid vertical={false} />
+
+                <Tooltip
+                  formatter={(value, name) => [
+                    `${value} unidades`,
+                    name === "entry" ? "Entrada" : "Saída",
+                  ]}
+                  labelFormatter={(value) =>
+                    `Data: ${new Date(value).toLocaleString()}`
+                  }
+                />
+                <Area
+                  dataKey="entry"
+                  type="natural"
+                  fill="var(--primary)"
+                  fillOpacity={0.4}
+                  stroke="var(--primary)"
+                />
+                <Area
+                  dataKey="exit"
+                  type="natural"
+                  fill="var(--primary)"
+                  fillOpacity={0.4}
+                  stroke="var(--primary)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+        <CardFooter>
+          <div className="flex w-full items-start gap-2 text-sm">
+            <div className="grid gap-2">
+              <div className="flex items-center gap-2 font-medium leading-none">
+                <TrendingUp className="h-4 w-4 text-green-500" />
+                Total entradas: {data?.totals.entry} unidades
+              </div>
+              <div className="flex items-center gap-2 leading-none text-muted-foreground">
+                <TrendingDown className="h-4 w-4 text-red-500" />
+                Total saídas: {data?.totals.exit} unidades
+              </div>
             </div>
           </div>
-        </div>
-      </CardFooter>
-    </Card>
-  );
+        </CardFooter>
+      </Card>
+    );
 }
