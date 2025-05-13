@@ -62,7 +62,6 @@ export function Chart() {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart accessibilityLayer data={chartData}>
                 <CartesianGrid vertical={false} />
-
                 <Tooltip
                   formatter={(value, name) => [
                     `${value} unidades`,
@@ -79,6 +78,7 @@ export function Chart() {
                   fillOpacity={0.4}
                   stroke="var(--primary)"
                 />
+
                 <Area
                   dataKey="exit"
                   type="natural"

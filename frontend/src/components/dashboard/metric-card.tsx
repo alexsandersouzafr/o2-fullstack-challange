@@ -9,7 +9,7 @@ const metriCardVariants = cva(
     variants: {
       variant: {
         default: "[&>div>span]:text-primary",
-        secondary: "bg-primary text-primary-foreground [&>div>span]:font-bold ",
+        secondary: "gradient text-primary-foreground [&>div>span]:font-bold ",
       },
     },
   }

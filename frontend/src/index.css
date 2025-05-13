@@ -41,6 +41,16 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+.gradient {
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 94, 1) 0%,
+    rgba(237, 116, 152, 1) 51%,
+    rgba(245, 0, 57, 1) 100%
+  );
+  background-size: 900px;
+}
+
 :root {
   --radius: 1rem;
   --background: oklch(1 0 0);
