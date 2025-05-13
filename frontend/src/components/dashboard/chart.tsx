@@ -78,7 +78,6 @@ export function Chart() {
                   fillOpacity={0.4}
                   stroke="var(--primary)"
                 />
-
                 <Area
                   dataKey="exit"
                   type="natural"

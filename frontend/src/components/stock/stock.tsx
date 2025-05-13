@@ -9,6 +9,8 @@ import { DataTablePagination } from "../ui/data-table-pagination";
 import { useSearch } from "@tanstack/react-router";
 import { Card } from "../ui/card";
 import { MessageCircleWarning } from "lucide-react";
+import { categoryStyles } from "@/lib/categories";
+import { cn } from "@/lib/utils";
 
 const TableSkeleton = () => (
   <div className="space-y-2">
@@ -40,10 +42,24 @@ export default function Stock() {
           if (typeof categoryId !== "number" || isCategoriesLoading) {
             return "Carregando...";
           }
-          const category: Category = categories?.find(
+          const category = categories?.find(
             (item: Category) => item.id === categoryId
           );
-          return category ? category.name : "Sem categoria";
+          const style = categoryStyles.find((item) => item.id === categoryId);
+
+          return category ? (
+            <div
+              className={cn(
+                style?.color,
+                "text-foreground/70  flex gap-2 items-center px-3 py-1  rounded-lg  text-sm"
+              )}
+            >
+              {style?.icon}
+              {category.name}
+            </div>
+          ) : (
+            "Sem categoria"
+          );
         },
       } as ColumnDef<Product, unknown>;
     }
