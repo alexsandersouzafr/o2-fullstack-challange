@@ -10,7 +10,6 @@ export interface Product {
   stock: number;
   unitPrice: number;
   categoryId: number;
-  category: Category;
   createdAt: string;
   updatedAt: string;
 }

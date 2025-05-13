@@ -53,8 +53,8 @@ export class ProductsService {
       where: {
         type: 'EXIT',
         date: {
-          gte: startDate ? startDate : '01-01-1900',
-          lte: endDate ? endDate : '01-01-3000',
+          gte: startDate ? startDate : new Date('01-01-1900'),
+          lte: endDate ? endDate : new Date('01-01-3000'),
         },
       },
       select: {

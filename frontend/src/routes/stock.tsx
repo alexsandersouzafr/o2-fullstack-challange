@@ -1,3 +1,4 @@
+import Stock from "@/components/stock/stock";
 import AnimatedPage from "@/components/ui/animated-page";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/stock")({
 function RouteComponent() {
   return (
     <AnimatedPage>
-      <div>Hello "/stock"!</div>
+      <Stock />
     </AnimatedPage>
   );
 }
