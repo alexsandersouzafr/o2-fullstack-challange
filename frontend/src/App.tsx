@@ -12,7 +12,10 @@ function App() {
       <div className="max-w-6xl mx-auto px-2 py-8 flex flex-col gap-4">
         <QueryClientProvider client={queryClient}>
           <Welcome />
-          <Navbar />
+          <div className="flex gap-8 justify-between">
+            <h1 className="text-5xl font-bold">DASHBOARD</h1>
+            <Navbar />
+          </div>
           <Dashboard />
         </QueryClientProvider>
       </div>
