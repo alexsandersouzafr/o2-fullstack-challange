@@ -6,11 +6,12 @@ import { Skeleton } from "../ui/skeleton";
 import type { Category, Product } from "@/lib/types";
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { DataTablePagination } from "../ui/data-table-pagination";
-import { useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Card } from "../ui/card";
-import { MessageCircleWarning } from "lucide-react";
+import { MessageCircleWarning, Plus } from "lucide-react";
 import { categoryStyles } from "@/lib/categories";
 import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 const TableSkeleton = () => (
   <div className="space-y-2">
@@ -66,6 +67,8 @@ export default function Stock() {
     return column;
   });
 
+  const navigate = useNavigate();
+
   return (
     <Card className="p-4 rounded-md border flex flex-col gap-4">
       {isLoading ? (
@@ -79,12 +82,18 @@ export default function Stock() {
         <>
           {data && (
             <>
-              <DataTablePagination
-                currentPage={data.currentPage ?? 1}
-                totalPages={data.totalPages ?? 1}
-                route="/stock"
-                pageSize={limit}
-              />
+              <div className="flex items-center justify-between">
+                <Button onClick={() => navigate({ to: "/add" })}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Adicionar produto
+                </Button>
+                <DataTablePagination
+                  currentPage={data.currentPage ?? 1}
+                  totalPages={data.totalPages ?? 1}
+                  route="/stock"
+                  pageSize={limit}
+                />
+              </div>
               <DataTable columns={tableColumns} data={data.products ?? []} />
             </>
           )}

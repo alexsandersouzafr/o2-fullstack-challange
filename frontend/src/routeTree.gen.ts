@@ -12,7 +12,10 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as StockImport } from './routes/stock'
+import { Route as ProductImport } from './routes/product'
 import { Route as MovementsImport } from './routes/movements'
+import { Route as EditProductImport } from './routes/edit-product'
+import { Route as AddImport } from './routes/add'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -23,9 +26,27 @@ const StockRoute = StockImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProductRoute = ProductImport.update({
+  id: '/product',
+  path: '/product',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const MovementsRoute = MovementsImport.update({
   id: '/movements',
   path: '/movements',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EditProductRoute = EditProductImport.update({
+  id: '/edit-product',
+  path: '/edit-product',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AddRoute = AddImport.update({
+  id: '/add',
+  path: '/add',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,11 +67,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/add': {
+      id: '/add'
+      path: '/add'
+      fullPath: '/add'
+      preLoaderRoute: typeof AddImport
+      parentRoute: typeof rootRoute
+    }
+    '/edit-product': {
+      id: '/edit-product'
+      path: '/edit-product'
+      fullPath: '/edit-product'
+      preLoaderRoute: typeof EditProductImport
+      parentRoute: typeof rootRoute
+    }
     '/movements': {
       id: '/movements'
       path: '/movements'
       fullPath: '/movements'
       preLoaderRoute: typeof MovementsImport
+      parentRoute: typeof rootRoute
+    }
+    '/product': {
+      id: '/product'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof ProductImport
       parentRoute: typeof rootRoute
     }
     '/stock': {
@@ -67,41 +109,69 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/add': typeof AddRoute
+  '/edit-product': typeof EditProductRoute
   '/movements': typeof MovementsRoute
+  '/product': typeof ProductRoute
   '/stock': typeof StockRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/add': typeof AddRoute
+  '/edit-product': typeof EditProductRoute
   '/movements': typeof MovementsRoute
+  '/product': typeof ProductRoute
   '/stock': typeof StockRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/add': typeof AddRoute
+  '/edit-product': typeof EditProductRoute
   '/movements': typeof MovementsRoute
+  '/product': typeof ProductRoute
   '/stock': typeof StockRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/movements' | '/stock'
+  fullPaths:
+    | '/'
+    | '/add'
+    | '/edit-product'
+    | '/movements'
+    | '/product'
+    | '/stock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/movements' | '/stock'
-  id: '__root__' | '/' | '/movements' | '/stock'
+  to: '/' | '/add' | '/edit-product' | '/movements' | '/product' | '/stock'
+  id:
+    | '__root__'
+    | '/'
+    | '/add'
+    | '/edit-product'
+    | '/movements'
+    | '/product'
+    | '/stock'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AddRoute: typeof AddRoute
+  EditProductRoute: typeof EditProductRoute
   MovementsRoute: typeof MovementsRoute
+  ProductRoute: typeof ProductRoute
   StockRoute: typeof StockRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AddRoute: AddRoute,
+  EditProductRoute: EditProductRoute,
   MovementsRoute: MovementsRoute,
+  ProductRoute: ProductRoute,
   StockRoute: StockRoute,
 }
 
@@ -116,15 +186,27 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/add",
+        "/edit-product",
         "/movements",
+        "/product",
         "/stock"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/add": {
+      "filePath": "add.tsx"
+    },
+    "/edit-product": {
+      "filePath": "edit-product.tsx"
+    },
     "/movements": {
       "filePath": "movements.tsx"
+    },
+    "/product": {
+      "filePath": "product.tsx"
     },
     "/stock": {
       "filePath": "stock.tsx"

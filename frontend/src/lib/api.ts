@@ -1,4 +1,9 @@
-import type { MovementsResponse, ProductResponse, StockTotals } from "./types";
+import type {
+  CreateProductResponse,
+  MovementsResponse,
+  ProductResponse,
+  StockTotals,
+} from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL as string;
 const REQUEST_TIMEOUT = 10000; // 10 seconds
@@ -88,8 +93,8 @@ export async function createProduct(product: {
   stock: number;
   unitPrice: number;
   categoryId: number;
-}): Promise<ProductResponse> {
-  return apiFetch<ProductResponse>("/products", {
+}): Promise<CreateProductResponse> {
+  return apiFetch<CreateProductResponse>("/products", {
     method: "POST",
     body: JSON.stringify(product),
   });

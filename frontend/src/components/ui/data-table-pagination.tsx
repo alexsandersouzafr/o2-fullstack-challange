@@ -3,7 +3,6 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Plus,
 } from "lucide-react";
 
 import {
@@ -50,72 +49,64 @@ export function DataTablePagination({
   };
 
   return (
-    <div className="flex items-center justify-between px-2">
-      <div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Adicionar produto
-        </Button>
+    <div className="flex items-center space-x-6 lg:space-x-8">
+      <div className="flex items-center space-x-2">
+        <p className="text-sm font-medium">Linhas por página</p>
+        <Select value={limit.toString()} onValueChange={handleLimitChange}>
+          <SelectTrigger className="h-8 w-[70px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent side="top">
+            {PAGE_SIZE_OPTIONS.map((option) => (
+              <SelectItem key={option} value={option.toString()}>
+                {option}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Linhas por página</p>
-          <Select value={limit.toString()} onValueChange={handleLimitChange}>
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {PAGE_SIZE_OPTIONS.map((option) => (
-                <SelectItem key={option} value={option.toString()}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Página {currentPage} de {totalPages}
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => goToPage(1)}
-            disabled={currentPage === 1}
-            aria-label="Ir para a primeira página"
-          >
-            <ChevronsLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() => currentPage >= 2 && goToPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            aria-label="Página anterior"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="h-8 w-8 p-0"
-            onClick={() =>
-              currentPage < totalPages && goToPage(Number(currentPage) + 1)
-            }
-            disabled={currentPage === totalPages}
-            aria-label="Próxima página"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => goToPage(totalPages)}
-            disabled={currentPage === totalPages}
-            aria-label="Ir para a última página"
-          >
-            <ChevronsRight className="h-4 w-4" />
-          </Button>
-        </div>
+      <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        Página {currentPage} de {totalPages}
+      </div>
+      <div className="flex items-center space-x-2">
+        <Button
+          variant="outline"
+          className="hidden h-8 w-8 p-0 lg:flex"
+          onClick={() => goToPage(1)}
+          disabled={currentPage === 1}
+          aria-label="Ir para a primeira página"
+        >
+          <ChevronsLeft className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          className="h-8 w-8 p-0"
+          onClick={() => currentPage >= 2 && goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          aria-label="Página anterior"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          className="h-8 w-8 p-0"
+          onClick={() =>
+            currentPage < totalPages && goToPage(Number(currentPage) + 1)
+          }
+          disabled={currentPage === totalPages}
+          aria-label="Próxima página"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          className="hidden h-8 w-8 p-0 lg:flex"
+          onClick={() => goToPage(totalPages)}
+          disabled={currentPage === totalPages}
+          aria-label="Ir para a última página"
+        >
+          <ChevronsRight className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );

@@ -67,3 +67,14 @@ export interface ProductResponse {
   totalPages: number;
   currentPage: number;
 }
+
+export interface CreateProductResponse {
+  id: number;
+  name: string;
+  description?: string;
+  stock: number;
+  unitPrice: number;
+  categoryId: number;
+  createdAt: string;
+  updatedAt: string;
+}
