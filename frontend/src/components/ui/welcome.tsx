@@ -7,7 +7,7 @@ export default function Welcome() {
   return (
     <div className="flex justify-between items-center ">
       <div>
-        <strong>Bem-vindo Usuário!</strong> Hoje é dia {formattedDate}.
+        <strong>Bem-vindo Usuário!</strong> Hoje é {formattedDate}.
       </div>
     </div>
   );

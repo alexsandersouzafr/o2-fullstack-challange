@@ -1,4 +1,4 @@
-import { DatePickerWithRange } from "@/components/date-picker-with-range";
+import { DatePickerWithRange } from "@/components/ui/date-picker-with-range";
 import { ProductFilter } from "./product-filter";
 import { FilterX } from "lucide-react";
 import { Button } from "@/components/ui/button";
