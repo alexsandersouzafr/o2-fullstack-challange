@@ -3,9 +3,9 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Plus,
 } from "lucide-react";
 
-import type { Table } from "@tanstack/react-table";
 import {
   Select,
   SelectContent,
@@ -14,78 +14,106 @@ import {
   SelectValue,
 } from "./select";
 import { Button } from "./button";
+import { useNavigate } from "@tanstack/react-router";
 
-interface DataTablePaginationProps<TData> {
-  table: Table<TData>;
+const DEFAULT_PAGE_SIZE = 10;
+const PAGE_SIZE_OPTIONS = [10, 20, 30];
+
+interface DataTablePaginationProps {
+  route: string;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
 }
 
-export function DataTablePagination<TData>({
-  table,
-}: DataTablePaginationProps<TData>) {
+export function DataTablePagination({
+  route,
+  totalPages,
+  currentPage,
+  pageSize,
+}: DataTablePaginationProps) {
+  const navigate = useNavigate();
+  const limit = pageSize > 0 ? pageSize : DEFAULT_PAGE_SIZE;
+
+  const handleLimitChange = (newLimit: string) => {
+    navigate({
+      to: route,
+      search: { limit: Number(newLimit), page: 1 },
+    });
+  };
+
+  const goToPage = (page: number) => {
+    navigate({
+      to: route,
+      search: { limit, page },
+    });
+  };
+
   return (
     <div className="flex items-center justify-between px-2">
-      <div className="flex-1 text-sm text-muted-foreground"></div>
+      <div>
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Adicionar produto
+        </Button>
+      </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Linhas por página </p>
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value));
-            }}
-          >
+          <p className="text-sm font-medium">Linhas por página</p>
+          <Select value={limit.toString()} onValueChange={handleLimitChange}>
             <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent side="top">
-              {[10, 20].map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {pageSize}
+              {PAGE_SIZE_OPTIONS.map((option) => (
+                <SelectItem key={option} value={option.toString()}>
+                  {option}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Página {table.getState().pagination.pageIndex + 1} de{" "}
-          {table.getPageCount()}
+          Página {currentPage} de {totalPages}
         </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => goToPage(1)}
+            disabled={currentPage === 1}
+            aria-label="Ir para a primeira página"
           >
-            <span className="sr-only">Primeira página</span>
-            <ChevronsLeft />
+            <ChevronsLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => currentPage >= 2 && goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label="Página anterior"
           >
-            <span className="sr-only">Voltar</span>
-            <ChevronLeft />
+            <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() =>
+              currentPage < totalPages && goToPage(Number(currentPage) + 1)
+            }
+            disabled={currentPage === totalPages}
+            aria-label="Próxima página"
           >
-            <span className="sr-only">Próxima</span>
-            <ChevronRight />
+            <ChevronRight className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
+            onClick={() => goToPage(totalPages)}
+            disabled={currentPage === totalPages}
+            aria-label="Ir para a última página"
           >
-            <span className="sr-only">Última página</span>
-            <ChevronsRight />
+            <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>
       </div>

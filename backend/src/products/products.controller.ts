@@ -11,14 +11,15 @@ import {
 import { CreateProducDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(@Query('limit') limit: number, @Query('page') page: number) {
+    return this.productService.findAll(limit, page);
   }
 
   @Get('stock-totals')
@@ -31,6 +32,7 @@ export class ProductsController {
     return this.productService.getTopProducts(limit);
   }
 
+  @ApiBody({ type: [CreateProducDto] })
   @Post()
   create(@Body() createProductDto: CreateProducDto) {
     return this.productService.create(createProductDto);
@@ -41,6 +43,7 @@ export class ProductsController {
     return this.productService.findOne(id);
   }
 
+  @ApiBody({ type: [UpdateProductDto] })
   @Put(':id')
   update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(id, updateProductDto);

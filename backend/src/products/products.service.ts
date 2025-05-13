@@ -7,8 +7,24 @@ import { UpdateProductDto } from './dto/update-product.dto';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.product.findMany();
+  async findAll(limit: number = 10, page: number = 1) {
+    const offset = (page - 1) * Number(limit);
+    const [products, total] = await Promise.all([
+      this.prisma.product.findMany({
+        take: Number(limit),
+        skip: offset,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.product.count(),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+    return {
+      products,
+      total,
+      totalPages,
+      currentPage: page,
+    };
   }
 
   async create(createProductDto: CreateProducDto) {

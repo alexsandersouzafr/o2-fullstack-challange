@@ -60,3 +60,10 @@ export interface DateRange {
   from: Date;
   to: Date;
 }
+
+export interface ProductResponse {
+  products: Product[];
+  total: number;
+  totalPages: number;
+  currentPage: number;
+}

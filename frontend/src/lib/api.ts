@@ -1,26 +1,85 @@
-import type { MovementsResponse, StockTotals } from "./types";
+import type { MovementsResponse, ProductResponse, StockTotals } from "./types";
 
-const API = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL as string;
+const REQUEST_TIMEOUT = 10000; // 10 seconds
 
-export async function getStockTotals(): Promise<StockTotals> {
-  const res = await fetch(API + "/products/stock-totals");
-  const data = await res.json();
-  return data;
-}
+const JSON_HEADERS = {
+  "Content-Type": "application/json",
+};
 
-export async function getAllProducts() {
-  const res = await fetch(API + "/products");
-  const data = await res.json();
-  return data;
-}
+async function apiFetch<T>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
-export async function getTopProducts(limit: number) {
-  const res = await fetch(API + "/products/top-products?limit=" + limit);
-  if (!res.ok) {
-    throw new Error("Erro ao recuperar lista de produtos.");
+  try {
+    const url = new URL(endpoint, API_BASE_URL).toString();
+    const res = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      headers: {
+        ...JSON_HEADERS,
+        ...options.headers,
+      },
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      const message =
+        errorData.message || `HTTP ${res.status}: ${res.statusText}`;
+      throw new Error(`Erro na requisição para ${endpoint}: ${message}`);
+    }
+
+    return res.json() as Promise<T>;
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(
+        `Requisição para ${endpoint} excedeu o tempo limite de ${REQUEST_TIMEOUT / 1000} segundos`
+      );
+    }
+    throw error instanceof Error
+      ? new Error(`Erro na requisição para ${endpoint}: ${error.message}`)
+      : new Error(`Erro desconhecido na requisição para ${endpoint}`);
+  } finally {
+    clearTimeout(timeoutId);
   }
-  const data = await res.json();
-  return data;
+}
+
+// API Functions
+export async function getStockTotals(): Promise<StockTotals> {
+  return apiFetch<StockTotals>("/products/stock-totals");
+}
+
+export async function getAllProducts(
+  limit: number = 10,
+  page: number = 1
+): Promise<ProductResponse> {
+  if (limit < 1 || page < 1) {
+    throw new Error(
+      "Parâmetros inválidos: limit e page devem ser maiores que 0"
+    );
+  }
+  const params = new URLSearchParams({
+    limit: String(limit),
+    page: String(page),
+  });
+  return apiFetch<ProductResponse>(`/products?${params.toString()}`);
+}
+
+export async function getTopProducts(
+  limit: number = 5
+): Promise<ProductResponse> {
+  if (limit < 1) {
+    throw new Error("Parâmetro inválido: limit deve ser maior que 0");
+  }
+  const params = new URLSearchParams({ limit: String(limit) });
+  return apiFetch<ProductResponse>(
+    `/products/top-products?${params.toString()}`
+  );
 }
 
 export async function createProduct(product: {
@@ -29,19 +88,20 @@ export async function createProduct(product: {
   stock: number;
   unitPrice: number;
   categoryId: number;
-}) {
-  const res = await fetch(API + "/products", {
+}): Promise<ProductResponse> {
+  return apiFetch<ProductResponse>("/products", {
     method: "POST",
     body: JSON.stringify(product),
   });
-  const data = await res.json();
-  return data;
 }
 
-export async function getProductById(productId: number) {
-  const res = await fetch(API + "/products/" + productId);
-  const data = await res.json();
-  return data;
+export async function getProductById(
+  productId: number
+): Promise<ProductResponse> {
+  if (productId < 1) {
+    throw new Error("Parâmetro inválido: productId deve ser maior que 0");
+  }
+  return apiFetch<ProductResponse>(`/products/${productId}`);
 }
 
 export async function updateProduct(
@@ -54,27 +114,27 @@ export async function updateProduct(
     unitPrice: number;
     categoryId: number;
   }
-) {
-  const res = await fetch(API + "/products/" + productId, {
+): Promise<ProductResponse> {
+  if (productId < 1) {
+    throw new Error("Parâmetro inválido: productId deve ser maior que 0");
+  }
+  return apiFetch<ProductResponse>(`/products/${productId}`, {
     method: "PUT",
     body: JSON.stringify(updatedProduct),
   });
-  const data = await res.json();
-  return data;
 }
 
-export async function deleteProduct(productId: number) {
-  const res = await fetch(API + "/products/" + productId, {
+export async function deleteProduct(productId: number): Promise<void> {
+  if (productId < 1) {
+    throw new Error("Parâmetro inválido: productId deve ser maior que 0");
+  }
+  return apiFetch<void>(`/products/${productId}`, {
     method: "DELETE",
   });
-  const data = await res.json();
-  return data;
 }
 
-export async function getCategories() {
-  const res = await fetch(API + "/categories/");
-  const data = await res.json();
-  return data;
+export async function getCategories(): Promise<CategoryResponse> {
+  return apiFetch<CategoryResponse>("/categories");
 }
 
 export async function createStockMovement(movement: {
@@ -82,35 +142,49 @@ export async function createStockMovement(movement: {
   quantity: number;
   totalValue: number;
   type: "ENTRY" | "EXIT";
-}) {
-  const res = await fetch(API + "/movements/", {
+}): Promise<MovementsResponse> {
+  if (movement.productId < 1 || movement.quantity < 0) {
+    throw new Error(
+      "Parâmetros inválidos: productId deve ser maior que 0 e quantity não pode ser negativo"
+    );
+  }
+  return apiFetch<MovementsResponse>("/movements", {
     method: "POST",
     body: JSON.stringify(movement),
   });
-  const data = await res.json();
-  return data;
 }
 
 export async function getMovements(
-  productId?: number | undefined,
+  productId?: number,
   startDate?: Date,
   endDate?: Date
 ): Promise<MovementsResponse> {
   const params = new URLSearchParams();
 
   if (productId !== undefined && productId !== null) {
+    if (productId < 1) {
+      throw new Error("Parâmetro inválido: productId deve ser maior que 0");
+    }
     params.append("productId", String(productId));
   }
 
   if (startDate) {
-    params.append("startDate", new Date(startDate).toISOString());
+    if (isNaN(startDate.getTime())) {
+      throw new Error("Parâmetro inválido: startDate deve ser uma data válida");
+    }
+    params.append("startDate", startDate.toISOString());
   }
 
   if (endDate) {
-    params.append("endDate", new Date(endDate).toISOString());
+    if (isNaN(endDate.getTime())) {
+      throw new Error("Parâmetro inválido: endDate deve ser uma data válida");
+    }
+    params.append("endDate", endDate.toISOString());
   }
 
-  const res = await fetch(API + `/movements?` + params.toString());
-  const data = await res.json();
-  return data;
+  return apiFetch<MovementsResponse>(`/movements?${params.toString()}`);
+}
+
+interface CategoryResponse {
+  categories: Array<{ id: number; name: string }>;
 }
