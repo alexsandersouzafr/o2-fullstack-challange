@@ -80,9 +80,7 @@ export function CreateProductForm() {
     mutationFn: createProduct,
   });
 
-  const onSubmit = (data: CreateProductSchemaType) => {
-    mutate(data, { onSuccess: (res) => {}, onError: (res) => {} });
-  };
+  const onSubmit = (data: CreateProductSchemaType) => mutate(data);
 
   const navigate = useNavigate();
 
