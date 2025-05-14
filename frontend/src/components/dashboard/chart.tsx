@@ -21,7 +21,7 @@ import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useQuery } from "@tanstack/react-query";
 import { getMovements } from "@/lib/api";
 import { useMemo } from "react";
-import { cn } from "@/lib/utils";
+import { cn, currencyFormatter } from "@/lib/utils";
 
 const chartConfig = {
   desktop: {
@@ -105,11 +105,12 @@ export function Chart({
             <div className="grid gap-2">
               <div className="flex items-center gap-2 font-medium leading-none">
                 <TrendingUp className="h-4 w-4 text-green-500" />
-                Total entradas: {data?.totals.entry} unidades
+                Total entradas:{" "}
+                {data ? currencyFormatter(data.totals.entry) : 0}
               </div>
               <div className="flex items-center gap-2 leading-none text-muted-foreground">
                 <TrendingDown className="h-4 w-4 text-red-500" />
-                Total saídas: {data?.totals.exit} unidades
+                Total saídas: {data ? currencyFormatter(data.totals.exit) : 0}
               </div>
             </div>
           </div>

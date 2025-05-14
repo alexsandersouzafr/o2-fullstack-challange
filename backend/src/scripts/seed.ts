@@ -42,7 +42,7 @@ async function seedDatabase() {
     }
 
     // Cria movimentações
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 500; i++) {
       const product = faker.helpers.arrayElement(products);
       const type = faker.helpers.arrayElement(['ENTRY', 'EXIT'] as const);
       const quantity = faker.number.int({ min: 1, max: 100 });
