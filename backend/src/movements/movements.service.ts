@@ -54,7 +54,7 @@ export class MovementsService {
   ) {
     const movements = await this.prisma.movement.findMany({
       where: {
-        ...(productId !== undefined && { productId }),
+        ...(productId !== undefined && { productId: Number(productId) }),
         date: {
           gte: startDate,
           lte: endDate,
@@ -69,7 +69,7 @@ export class MovementsService {
     const totals = await this.prisma.movement.groupBy({
       by: ['type'],
       where: {
-        ...(productId !== undefined && { productId }),
+        ...(productId !== undefined && { productId: Number(productId) }),
         date: {
           gte: startDate,
           lte: endDate,

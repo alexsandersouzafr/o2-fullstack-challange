@@ -11,26 +11,14 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as StockImport } from './routes/stock'
-import { Route as ProductImport } from './routes/product'
 import { Route as MovementsImport } from './routes/movements'
 import { Route as EditProductImport } from './routes/edit-product'
 import { Route as AddImport } from './routes/add'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProductIndexImport } from './routes/product.index'
+import { Route as ProductIdImport } from './routes/product.$id'
 
 // Create/Update Routes
-
-const StockRoute = StockImport.update({
-  id: '/stock',
-  path: '/stock',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ProductRoute = ProductImport.update({
-  id: '/product',
-  path: '/product',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const MovementsRoute = MovementsImport.update({
   id: '/movements',
@@ -53,6 +41,18 @@ const AddRoute = AddImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductIndexRoute = ProductIndexImport.update({
+  id: '/product/',
+  path: '/product/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductIdRoute = ProductIdImport.update({
+  id: '/product/$id',
+  path: '/product/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,18 +88,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MovementsImport
       parentRoute: typeof rootRoute
     }
-    '/product': {
-      id: '/product'
-      path: '/product'
-      fullPath: '/product'
-      preLoaderRoute: typeof ProductImport
+    '/product/$id': {
+      id: '/product/$id'
+      path: '/product/$id'
+      fullPath: '/product/$id'
+      preLoaderRoute: typeof ProductIdImport
       parentRoute: typeof rootRoute
     }
-    '/stock': {
-      id: '/stock'
-      path: '/stock'
-      fullPath: '/stock'
-      preLoaderRoute: typeof StockImport
+    '/product/': {
+      id: '/product/'
+      path: '/product'
+      fullPath: '/product'
+      preLoaderRoute: typeof ProductIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -112,8 +112,8 @@ export interface FileRoutesByFullPath {
   '/add': typeof AddRoute
   '/edit-product': typeof EditProductRoute
   '/movements': typeof MovementsRoute
-  '/product': typeof ProductRoute
-  '/stock': typeof StockRoute
+  '/product/$id': typeof ProductIdRoute
+  '/product': typeof ProductIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -121,8 +121,8 @@ export interface FileRoutesByTo {
   '/add': typeof AddRoute
   '/edit-product': typeof EditProductRoute
   '/movements': typeof MovementsRoute
-  '/product': typeof ProductRoute
-  '/stock': typeof StockRoute
+  '/product/$id': typeof ProductIdRoute
+  '/product': typeof ProductIndexRoute
 }
 
 export interface FileRoutesById {
@@ -131,8 +131,8 @@ export interface FileRoutesById {
   '/add': typeof AddRoute
   '/edit-product': typeof EditProductRoute
   '/movements': typeof MovementsRoute
-  '/product': typeof ProductRoute
-  '/stock': typeof StockRoute
+  '/product/$id': typeof ProductIdRoute
+  '/product/': typeof ProductIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -142,18 +142,24 @@ export interface FileRouteTypes {
     | '/add'
     | '/edit-product'
     | '/movements'
+    | '/product/$id'
     | '/product'
-    | '/stock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add' | '/edit-product' | '/movements' | '/product' | '/stock'
+  to:
+    | '/'
+    | '/add'
+    | '/edit-product'
+    | '/movements'
+    | '/product/$id'
+    | '/product'
   id:
     | '__root__'
     | '/'
     | '/add'
     | '/edit-product'
     | '/movements'
-    | '/product'
-    | '/stock'
+    | '/product/$id'
+    | '/product/'
   fileRoutesById: FileRoutesById
 }
 
@@ -162,8 +168,8 @@ export interface RootRouteChildren {
   AddRoute: typeof AddRoute
   EditProductRoute: typeof EditProductRoute
   MovementsRoute: typeof MovementsRoute
-  ProductRoute: typeof ProductRoute
-  StockRoute: typeof StockRoute
+  ProductIdRoute: typeof ProductIdRoute
+  ProductIndexRoute: typeof ProductIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -171,8 +177,8 @@ const rootRouteChildren: RootRouteChildren = {
   AddRoute: AddRoute,
   EditProductRoute: EditProductRoute,
   MovementsRoute: MovementsRoute,
-  ProductRoute: ProductRoute,
-  StockRoute: StockRoute,
+  ProductIdRoute: ProductIdRoute,
+  ProductIndexRoute: ProductIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -189,8 +195,8 @@ export const routeTree = rootRoute
         "/add",
         "/edit-product",
         "/movements",
-        "/product",
-        "/stock"
+        "/product/$id",
+        "/product/"
       ]
     },
     "/": {
@@ -205,11 +211,11 @@ export const routeTree = rootRoute
     "/movements": {
       "filePath": "movements.tsx"
     },
-    "/product": {
-      "filePath": "product.tsx"
+    "/product/$id": {
+      "filePath": "product.$id.tsx"
     },
-    "/stock": {
-      "filePath": "stock.tsx"
+    "/product/": {
+      "filePath": "product.index.tsx"
     }
   }
 }

@@ -1,8 +1,11 @@
 import type {
+  Category,
   CreateProductResponse,
   MovementsResponse,
+  Product,
   ProductResponse,
   StockTotals,
+  TopProduct,
 } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL as string;
@@ -56,7 +59,7 @@ async function apiFetch<T>(
 
 // API Functions
 export async function getStockTotals(): Promise<StockTotals> {
-  return apiFetch<StockTotals>("/products/stock-totals");
+  return apiFetch<StockTotals>("/products/product-totals");
 }
 
 export async function getAllProducts(
@@ -75,16 +78,12 @@ export async function getAllProducts(
   return apiFetch<ProductResponse>(`/products?${params.toString()}`);
 }
 
-export async function getTopProducts(
-  limit: number = 5
-): Promise<ProductResponse> {
+export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
   if (limit < 1) {
     throw new Error("Parâmetro inválido: limit deve ser maior que 0");
   }
   const params = new URLSearchParams({ limit: String(limit) });
-  return apiFetch<ProductResponse>(
-    `/products/top-products?${params.toString()}`
-  );
+  return apiFetch<TopProduct[]>(`/products/top-products?${params.toString()}`);
 }
 
 export async function createProduct(product: {
@@ -100,13 +99,11 @@ export async function createProduct(product: {
   });
 }
 
-export async function getProductById(
-  productId: number
-): Promise<ProductResponse> {
+export async function getProductById(productId: number): Promise<Product> {
   if (productId < 1) {
     throw new Error("Parâmetro inválido: productId deve ser maior que 0");
   }
-  return apiFetch<ProductResponse>(`/products/${productId}`);
+  return apiFetch<Product>(`/products/${productId}`);
 }
 
 export async function updateProduct(
@@ -138,8 +135,8 @@ export async function deleteProduct(productId: number): Promise<void> {
   });
 }
 
-export async function getCategories(): Promise<CategoryResponse> {
-  return apiFetch<CategoryResponse>("/categories");
+export async function getCategories(): Promise<Category[]> {
+  return apiFetch<Category[]>("/categories");
 }
 
 export async function createStockMovement(movement: {
@@ -188,8 +185,4 @@ export async function getMovements(
   }
 
   return apiFetch<MovementsResponse>(`/movements?${params.toString()}`);
-}
-
-interface CategoryResponse {
-  categories: Array<{ id: number; name: string }>;
 }

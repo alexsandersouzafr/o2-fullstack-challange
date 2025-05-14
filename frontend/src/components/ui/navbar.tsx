@@ -3,34 +3,36 @@ import { CircleGauge, PackageSearch, TicketCheck } from "lucide-react";
 import { Sparkles } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "./button";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   return (
     <nav className="flex justify-between items-center gap-4">
       <ThemeToggle />
       <div className="flex [&>button]:bg-primary/40 [&>button]:text-foreground">
-        <Link to="/">
-          <Button className="rounded-r-none">
-            <CircleGauge strokeWidth={1.5} />
-            Dashboard
-          </Button>
-        </Link>{" "}
-        <Link to="/stock">
-          <Button className="rounded-none border-l border-r">
-            <PackageSearch strokeWidth={1.5} />
-            Produtos
-          </Button>
-        </Link>
-        <Link to="/movements">
-          <Button
-            className="
+        <Button
+          className="rounded-r-none"
+          onClick={() => navigate({ to: "/" })}
+        >
+          <CircleGauge strokeWidth={1.5} />
+          Dashboard
+        </Button>
+        <Button
+          className="rounded-none border-l border-r"
+          onClick={() => navigate({ to: "/product" })}
+        >
+          <PackageSearch strokeWidth={1.5} />
+          Produtos
+        </Button>
+        <Button
+          className="
           rounded-l-none"
-          >
-            <TicketCheck strokeWidth={1.5} />
-            Movimentações
-          </Button>
-        </Link>
+          onClick={() => navigate({ to: "/movements" })}
+        >
+          <TicketCheck strokeWidth={1.5} />
+          Movimentações
+        </Button>
       </div>
       <Button className="px-5">
         <Sparkles className="h-[1.2rem] w-[1.2rem] transition-all" /> Ajuda da

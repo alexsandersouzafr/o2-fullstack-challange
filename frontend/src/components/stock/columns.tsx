@@ -1,20 +1,7 @@
 import type { Product } from "@/lib/types";
 import type { ColumnDef } from "@tanstack/react-table";
-import {
-  ChartNoAxesCombined,
-  MoreHorizontal,
-  PackagePlus,
-  Pencil,
-} from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import ActionMenu from "./action-menu";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -96,31 +83,8 @@ export const columns: ColumnDef<Product>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="rounded-lg">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <Pencil />
-              Editar Produto
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <ChartNoAxesCombined />
-              Ver mais detalhes
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <PackagePlus />
-              Nova movimentação
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      const id: number = row.getValue("id");
+      return <ActionMenu id={id} />;
     },
   },
 ];

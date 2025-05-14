@@ -29,10 +29,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function Chart() {
+export function Chart({
+  id,
+  startDate,
+  endDate,
+}: {
+  id?: number;
+  startDate?: Date;
+  endDate?: Date;
+}) {
   const { data, error } = useQuery({
     queryKey: ["movements"],
-    queryFn: () => getMovements(),
+    queryFn: () => getMovements(id, startDate, endDate),
   });
 
   const chartData = useMemo(() => {
@@ -52,9 +60,9 @@ export function Chart() {
     return (
       <Card className="w-[70%]">
         <CardHeader>
-          <CardTitle>Vendas</CardTitle>
+          <CardTitle>Movimentações do Estoque</CardTitle>
           <CardDescription>
-            Mostrando gráficos de vendas no período selecionado.
+            Mostrando gráficos de movimentações no período selecionado.
           </CardDescription>
         </CardHeader>
         <CardContent>

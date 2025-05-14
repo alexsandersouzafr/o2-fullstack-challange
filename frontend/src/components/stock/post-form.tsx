@@ -92,7 +92,7 @@ export function CreateProductForm() {
           size="default"
           variant="secondary"
           className="w-fit"
-          onClick={() => navigate({ to: "/stock" })}
+          onClick={() => navigate({ to: "/product" })}
         >
           <ChevronLeftCircle />
           Voltar

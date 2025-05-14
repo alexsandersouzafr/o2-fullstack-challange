@@ -32,14 +32,13 @@ export default function TopProducts() {
       )}
       <ul className="flex flex-col gap-4 ">
         {isFetched &&
-          products.map((product: Product, index: number) => (
+          products?.map((product: Product, index: number) => (
             <li
               key={index}
               className="flex gap-2 px-4 items-center group justify-between hover:bg-primary/20 transition-all duration-300 p-2 rounded-lg"
             >
               <div>
                 <span className="text-primary ">{index + 1}.</span>
-                {"  "}
                 {product.name}
               </div>{" "}
               <Button variant="outline" size="sm">

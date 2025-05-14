@@ -22,7 +22,7 @@ const TableSkeleton = () => (
 );
 
 export default function Stock() {
-  const { limit, page } = useSearch({ from: "/stock" });
+  const { limit, page } = useSearch({ from: "/product/" });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["stockProducts", limit, page],
@@ -90,7 +90,7 @@ export default function Stock() {
                 <DataTablePagination
                   currentPage={data.currentPage ?? 1}
                   totalPages={data.totalPages ?? 1}
-                  route="/stock"
+                  route="/product"
                   pageSize={limit}
                 />
               </div>

@@ -8,9 +8,9 @@ const productSearchSchema = z.object({
   page: z.number().min(1).default(1),
 });
 
-export const Route = createFileRoute("/stock")({
+export const Route = createFileRoute("/product/")({
   component: RouteComponent,
-  validateSearch: productSearchSchema, // Automatically validates and parses search params
+  validateSearch: productSearchSchema,
 });
 
 function RouteComponent() {
