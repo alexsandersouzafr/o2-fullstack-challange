@@ -21,6 +21,7 @@ import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useQuery } from "@tanstack/react-query";
 import { getMovements } from "@/lib/api";
 import { useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
   desktop: {
@@ -33,10 +34,12 @@ export function Chart({
   id,
   startDate,
   endDate,
+  className,
 }: {
   id?: number;
   startDate?: Date;
   endDate?: Date;
+  className?: string;
 }) {
   const { data, error } = useQuery({
     queryKey: ["movements"],
@@ -58,7 +61,7 @@ export function Chart({
 
   if (!error)
     return (
-      <Card className="w-[70%]">
+      <Card className={cn("w-[70%]", className)}>
         <CardHeader>
           <CardTitle>Movimentações do Estoque</CardTitle>
           <CardDescription>

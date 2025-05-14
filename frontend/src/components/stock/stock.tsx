@@ -10,8 +10,8 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Card } from "../ui/card";
 import { MessageCircleWarning, Plus } from "lucide-react";
 import { categoryStyles } from "@/lib/categories";
-import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import CategoryBadge from "../ui/category-badge";
 
 const TableSkeleton = () => (
   <div className="space-y-2">
@@ -49,15 +49,11 @@ export default function Stock() {
           const style = categoryStyles.find((item) => item.id === categoryId);
 
           return category ? (
-            <div
-              className={cn(
-                style?.color,
-                "text-foreground/70  flex gap-2 items-center px-3 py-1  rounded-lg  text-sm"
-              )}
-            >
-              {style?.icon}
-              {category.name}
-            </div>
+            <CategoryBadge
+              style={style!}
+              category={category!}
+              className="w-fit"
+            />
           ) : (
             "Sem categoria"
           );

@@ -25,7 +25,7 @@ export default function MetricCard({
 }: {
   title: string;
   value: string;
-  icon: React.JSX.Element;
+  icon?: React.JSX.Element;
 } & VariantProps<typeof metriCardVariants> &
   React.ComponentProps<"div">) {
   return (

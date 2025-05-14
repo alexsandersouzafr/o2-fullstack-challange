@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { Filter } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -19,10 +19,6 @@ export function DatePickerWithRange({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [date, setDate] = React.useState<DateRange | undefined>();
-  //   {
-  //   from: new Date(2022, 0, 20),
-  //   to: addDays(new Date(2022, 0, 20), 20),
-  // }
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -32,11 +28,11 @@ export function DatePickerWithRange({
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[250px] justify-start text-left font-normal",
+              "w-[250px] justify-start text-left font-normal rounded-l-lg rounded-r-none",
               !date && "text-muted-foreground"
             )}
           >
-            <CalendarIcon />
+            <Filter />
             {date?.from ? (
               date.to ? (
                 <>
@@ -54,7 +50,7 @@ export function DatePickerWithRange({
                 })
               )
             ) : (
-              <span>Selecionar período</span>
+              <span>Filtrar por período</span>
             )}
           </Button>
         </PopoverTrigger>

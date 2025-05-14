@@ -1,8 +1,10 @@
 import {
   ChartNoAxesCombined,
   MoreHorizontal,
+  PackageMinus,
   PackagePlus,
   Pencil,
+  Trash,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,28 +26,45 @@ export default function ActionMenu({ id }: { id: number }) {
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="rounded-lg">
-        <DropdownMenuLabel>Ações</DropdownMenuLabel>
-        <DropdownMenuItem>
-          <Pencil />
-          Editar Produto
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() =>
-            navigate({
-              to: "/product/$id",
-              params: { id: id.toString() },
-              replace: true,
-            })
-          }
-        >
-          <ChartNoAxesCombined />
-          Ver mais detalhes
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <PackagePlus />
-          Nova movimentação
-        </DropdownMenuItem>
+      <DropdownMenuContent
+        align="end"
+        className="rounded-lg flex flex-col gap-2 p-4"
+      >
+        <div>
+          <DropdownMenuLabel>Ações</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() =>
+              navigate({
+                to: "/product/$id",
+                params: { id: id.toString() },
+                replace: true,
+              })
+            }
+          >
+            <ChartNoAxesCombined />
+            Ver detalhes
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Pencil />
+            Editar
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Trash />
+            Excluir
+          </DropdownMenuItem>
+        </div>
+        <hr />
+        <div>
+          <DropdownMenuLabel>Movimentação</DropdownMenuLabel>
+          <DropdownMenuItem>
+            <PackagePlus />
+            Nova entrada
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <PackageMinus />
+            Nova saída
+          </DropdownMenuItem>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

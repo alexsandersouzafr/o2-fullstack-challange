@@ -1,4 +1,4 @@
-import { CircleGauge, PackageSearch, TicketCheck } from "lucide-react";
+import { CircleGauge, PackageSearch } from "lucide-react";
 
 import { Sparkles } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
@@ -19,19 +19,11 @@ export default function Navbar() {
           Dashboard
         </Button>
         <Button
-          className="rounded-none border-l border-r"
+          className="rounded-r-lg rounded-l-none border-l "
           onClick={() => navigate({ to: "/product" })}
         >
           <PackageSearch strokeWidth={1.5} />
           Produtos
-        </Button>
-        <Button
-          className="
-          rounded-l-none"
-          onClick={() => navigate({ to: "/movements" })}
-        >
-          <TicketCheck strokeWidth={1.5} />
-          Movimentações
         </Button>
       </div>
       <Button className="px-5">

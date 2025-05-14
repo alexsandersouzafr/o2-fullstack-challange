@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getTopProducts } from "@/lib/api";
 import type { Product } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
-import { Expand, Package } from "lucide-react";
+import { Package } from "lucide-react";
+import ActionMenu from "../stock/action-menu";
 
 export default function TopProducts() {
   const {
@@ -38,16 +38,14 @@ export default function TopProducts() {
               className="flex gap-2 px-4 items-center group justify-between hover:bg-primary/20 transition-all duration-300 p-2 rounded-lg"
             >
               <div>
-                <span className="text-primary ">{index + 1}.</span>
+                <span className="text-primary font-bold">{index + 1}.</span>{" "}
                 {product.name}
-              </div>{" "}
-              <Button variant="outline" size="sm">
-                <Expand />{" "}
-              </Button>
+              </div>
+              <ActionMenu id={product.id} />
             </li>
           ))}
       </ul>
-      {error && "ERRO"}
+      {error && "Erro ao recuperar dados de produtos."}
     </Card>
   );
 }
