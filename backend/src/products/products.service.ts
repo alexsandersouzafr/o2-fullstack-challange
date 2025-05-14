@@ -70,10 +70,13 @@ export class ProductsService {
     const movements = await this.prisma.movement.findMany({
       where: {
         type: 'EXIT',
-        date: {
-          gte: startDate ? startDate : new Date('01-01-1900'),
-          lte: endDate ? endDate : new Date('01-01-3000'),
-        },
+        ...(startDate &&
+          endDate && {
+            date: {
+              gte: startDate,
+              lte: endDate,
+            },
+          }),
       },
       select: {
         quantity: true,

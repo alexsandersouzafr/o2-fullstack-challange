@@ -22,6 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMovements } from "@/lib/api";
 import { useMemo } from "react";
 import { cn, currencyFormatter } from "@/lib/utils";
+import { useDateRangeSearchParams } from "@/hooks/useDateRangeSearchParams";
 
 const chartConfig = {
   desktop: {
@@ -30,20 +31,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function Chart({
-  id,
-  startDate,
-  endDate,
-  className,
-}: {
-  id?: number;
-  startDate?: Date;
-  endDate?: Date;
-  className?: string;
-}) {
-  const { data, error } = useQuery({
+export function Chart({ id, className }: { id?: number; className?: string }) {
+  const { date } = useDateRangeSearchParams();
+
+  const { data, error, status } = useQuery({
     queryKey: ["movements"],
-    queryFn: () => getMovements(id, startDate, endDate),
+    queryFn: () => getMovements(id, date?.from, date?.to),
   });
 
   const chartData = useMemo(() => {
@@ -59,62 +52,69 @@ export function Chart({
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [data]);
 
-  if (!error)
+  if (error)
     return (
-      <Card className={cn("w-[70%]", className)}>
-        <CardHeader>
-          <CardTitle>Movimentações do Estoque</CardTitle>
-          <CardDescription>
-            Mostrando gráficos de movimentações no período selecionado.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-52 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <Tooltip
-                  formatter={(value, name) => [
-                    `${value} unidades`,
-                    name === "entry" ? "Entrada" : "Saída",
-                  ]}
-                  labelFormatter={(value) =>
-                    `Data: ${new Date(value).toLocaleString()}`
-                  }
-                />
-                <Area
-                  dataKey="entry"
-                  type="natural"
-                  fill="var(--primary)"
-                  fillOpacity={0.4}
-                  stroke="var(--primary)"
-                />
-                <Area
-                  dataKey="exit"
-                  type="natural"
-                  fill="var(--primary)"
-                  fillOpacity={0.4}
-                  stroke="var(--primary)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-        <CardFooter>
-          <div className="flex w-full items-start gap-2 text-sm">
-            <div className="grid gap-2">
-              <div className="flex items-center gap-2 font-medium leading-none">
-                <TrendingUp className="h-4 w-4 text-green-500" />
-                Total entradas:{" "}
-                {data ? currencyFormatter(data.totals.entry) : 0}
-              </div>
-              <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                <TrendingDown className="h-4 w-4 text-red-500" />
-                Total saídas: {data ? currencyFormatter(data.totals.exit) : 0}
-              </div>
+      <div>
+        {error.message}
+        {error.name}
+        {status}
+      </div>
+    );
+
+  return (
+    <Card className={cn("w-[70%]", className)}>
+      <CardHeader>
+        <CardTitle>Movimentações do Estoque</CardTitle>
+        <CardDescription>
+          Mostrando gráficos de movimentações no período selecionado.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="h-52 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <Tooltip
+                formatter={(value, name) => [
+                  `${value} unidades`,
+                  name === "entry" ? "Entrada" : "Saída",
+                ]}
+                labelFormatter={(value) =>
+                  `Data: ${new Date(value).toLocaleString()}`
+                }
+              />
+              <Area
+                dataKey="entry"
+                type="natural"
+                fill="var(--primary)"
+                fillOpacity={0.4}
+                stroke="var(--primary)"
+              />
+              <Area
+                dataKey="exit"
+                type="natural"
+                fill="var(--primary)"
+                fillOpacity={0.4}
+                stroke="var(--primary)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter>
+        <div className="flex w-full items-start gap-2 text-sm">
+          <div className="grid gap-2">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              <TrendingUp className="h-4 w-4 text-green-500" />
+              Total entradas: {data ? currencyFormatter(data.totals.entry) : 0}
+            </div>
+            <div className="flex items-center gap-2 leading-none text-muted-foreground">
+              <TrendingDown className="h-4 w-4 text-red-500" />
+              Total saídas: {data ? currencyFormatter(data.totals.exit) : 0}
             </div>
           </div>
-        </CardFooter>
-      </Card>
-    );
+        </div>
+      </CardFooter>
+    </Card>
+  );
 }

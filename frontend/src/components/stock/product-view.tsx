@@ -10,16 +10,20 @@ import { categoryStyles } from "@/lib/categories";
 import CategoryBadge from "../ui/category-badge";
 import { Card } from "../ui/card";
 import Metrics from "./metrics";
+import { useDateRangeSearchParams } from "@/hooks/useDateRangeSearchParams";
 
 export default function ProductView({ id }: { id: number }) {
+  const { date } = useDateRangeSearchParams();
+
   const { data: productData } = useQuery({
-    queryKey: ["product"],
+    queryKey: ["product", id],
     queryFn: () => getProductById(id),
   });
 
   const { data: movementsData } = useQuery({
-    queryKey: ["movement"],
-    queryFn: () => getMovements(id),
+    queryKey: ["movement", date, id],
+
+    queryFn: () => getMovements(id, date?.from, date?.to),
   });
 
   const { data: categoriesData } = useQuery({

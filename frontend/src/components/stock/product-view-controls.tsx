@@ -15,12 +15,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DatePickerWithRange } from "../ui/date-picker-with-range";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 export default function ProductViewControls() {
+  const navigate = useNavigate();
+  const pathname = useLocation().pathname;
   return (
     <div className="flex ">
-      <DatePickerWithRange />
-      <Button variant="secondary" className="rounded-none border-l border-r">
+      <DatePickerWithRange route="/product/$id" />
+      <Button
+        variant="secondary"
+        className="rounded-none border-l border-r"
+        onClick={() => navigate({ to: pathname })}
+      >
         <FilterX />
         Limpar Filtro
       </Button>

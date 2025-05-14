@@ -57,8 +57,8 @@ export interface MovementsResponse {
 }
 
 export interface DateRange {
-  from: Date;
-  to: Date;
+  from?: Date;
+  to?: Date;
 }
 
 export interface ProductResponse {
@@ -77,4 +77,18 @@ export interface CreateProductResponse {
   categoryId: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export type Routes =
+  | "/product/$id"
+  | "/"
+  | "/add"
+  | "/edit-product"
+  | "/product"
+  | "."
+  | "..";
+
+export interface DateRangeSearchParams {
+  startDate?: string;
+  endDate?: string;
 }

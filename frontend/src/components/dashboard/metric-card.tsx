@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { Filter } from "lucide-react";
 import type React from "react";
 
 const metriCardVariants = cva(
@@ -21,20 +22,28 @@ export default function MetricCard({
   value,
   icon,
   variant,
+  filtered,
   ...props
 }: {
   title: string;
   value: string;
   icon?: React.JSX.Element;
+  filtered?: boolean;
 } & VariantProps<typeof metriCardVariants> &
   React.ComponentProps<"div">) {
   return (
-    <Card {...props} className={cn(metriCardVariants({ variant, className }))}>
+    <Card
+      {...props}
+      className={cn(metriCardVariants({ variant, className }), "relative")}
+    >
       {icon}
       <div>
         <h3>{title}</h3>
         <span className="text-3xl">{value}</span>
       </div>
+      {filtered && (
+        <Filter className="absolute right-3 size-4 bottom-3 text-foreground/50" />
+      )}
     </Card>
   );
 }

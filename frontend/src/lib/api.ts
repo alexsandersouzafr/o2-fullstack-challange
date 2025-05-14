@@ -42,6 +42,8 @@ async function apiFetch<T>(
       throw new Error(`Erro na requisição para ${endpoint}: ${message}`);
     }
 
+    console.log("fetched:", endpoint);
+
     return res.json() as Promise<T>;
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
@@ -58,8 +60,15 @@ async function apiFetch<T>(
 }
 
 // API Functions
-export async function getStockTotals(): Promise<StockTotals> {
-  return apiFetch<StockTotals>("/products/product-totals");
+export async function getStockTotals(
+  startDate?: string,
+  endDate?: string
+): Promise<StockTotals> {
+  const params = new URLSearchParams({
+    startDate: startDate?.toString() || "",
+    endDate: endDate?.toString() || "",
+  });
+  return apiFetch<StockTotals>(`/products/stock-totals?${params.toString()}`);
 }
 
 export async function getAllProducts(

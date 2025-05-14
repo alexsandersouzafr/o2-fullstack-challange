@@ -4,6 +4,7 @@ import { Card } from "../ui/card";
 import { ClockPlus, FilePenLine } from "lucide-react";
 import type { MovementsResponse, Product } from "@/lib/types";
 import { format } from "date-fns";
+import { useDateRangeSearchParams } from "@/hooks/useDateRangeSearchParams";
 
 export default function Metrics({
   movementsData,
@@ -12,6 +13,7 @@ export default function Metrics({
   movementsData: MovementsResponse;
   productData: Product;
 }) {
+  const { date } = useDateRangeSearchParams();
   return (
     <div className="grid grid-cols-2 gap-8 w-1/2">
       <MetricCard
@@ -19,6 +21,7 @@ export default function Metrics({
         title="Total de vendas:"
         value={currencyFormatter(movementsData.totals.exit).toString()}
         variant="secondary"
+        filtered={date?.from && date?.to !== undefined}
       />
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
@@ -29,12 +32,14 @@ export default function Metrics({
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
         title="Itens vendidos:"
         value={movementsData.totals.totalItemsSold.toString()}
+        filtered={date?.from && date?.to !== undefined}
       />
 
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
         title="Itens comprados:"
         value={movementsData.totals.entry.toString()}
+        filtered={date?.from && date?.to !== undefined}
       />
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"

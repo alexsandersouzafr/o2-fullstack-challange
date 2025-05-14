@@ -3,11 +3,14 @@ import { currencyFormatter } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { BadgeDollarSign, Layers, PackageCheck } from "lucide-react";
 import MetricCard from "./metric-card";
+import { useDateRangeSearchParams } from "@/hooks/useDateRangeSearchParams";
 
 export default function MetricHighlights() {
+  const { date } = useDateRangeSearchParams();
+
   const { data: metrics } = useQuery({
-    queryKey: ["darboardMetrics"],
-    queryFn: () => getStockTotals(),
+    queryKey: ["dashboardMetrics", date],
+    queryFn: () => getStockTotals(date?.from?.toString(), date?.to?.toString()),
   });
 
   const cardsData = [
@@ -15,6 +18,7 @@ export default function MetricHighlights() {
       title: "Total de vendas",
       value: String(currencyFormatter(metrics?.totalSales || 0)),
       icon: <BadgeDollarSign strokeWidth={1.5} size={44} />,
+      filtered: date?.from && date?.to !== undefined,
     },
     {
       title: "Valor do estoque",
@@ -25,6 +29,7 @@ export default function MetricHighlights() {
       title: "Total de ítens vendidos",
       value: String(metrics?.totalItemsSold || 0),
       icon: <PackageCheck strokeWidth={1.5} size={44} />,
+      filtered: date?.from && date?.to !== undefined,
     },
   ];
 

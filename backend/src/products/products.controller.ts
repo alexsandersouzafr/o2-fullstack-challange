@@ -24,8 +24,11 @@ export class ProductsController {
   }
 
   @Get('stock-totals')
-  getStockTotals() {
-    return this.productService.getStockTotals();
+  getStockTotals(
+    @Query('startDate') startDate: Date,
+    @Query('endDate') endDate: Date,
+  ) {
+    return this.productService.getStockTotals(startDate, endDate);
   }
 
   @Get('top-products')
