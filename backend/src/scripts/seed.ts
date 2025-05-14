@@ -16,7 +16,6 @@ interface Product {
 
 async function seedDatabase() {
   try {
-    // Cria categorias
     const categories = await Promise.all([
       prisma.category.create({ data: { name: 'Eletrônicos' } }),
       prisma.category.create({ data: { name: 'Roupas' } }),
@@ -25,7 +24,6 @@ async function seedDatabase() {
       prisma.category.create({ data: { name: 'Livros' } }),
     ]);
 
-    // Cria produtos
     const products: Product[] = [];
     for (let i = 0; i < 100; i++) {
       const category = faker.helpers.arrayElement(categories);
@@ -41,7 +39,6 @@ async function seedDatabase() {
       products.push(product);
     }
 
-    // Cria movimentações
     for (let i = 0; i < 200; i++) {
       const product = faker.helpers.arrayElement(products);
       const type = faker.helpers.arrayElement(['ENTRY', 'EXIT'] as const);
@@ -58,7 +55,6 @@ async function seedDatabase() {
         },
       });
 
-      // Atualizar estoque do produto
       const newStock =
         type === 'ENTRY' ? product.stock + quantity : product.stock - quantity;
 
@@ -77,7 +73,6 @@ async function seedDatabase() {
   }
 }
 
-// Execute the seed function
 seedDatabase().catch((error) => {
   console.error('Unhandled error in seed script:', error);
   process.exit(1);

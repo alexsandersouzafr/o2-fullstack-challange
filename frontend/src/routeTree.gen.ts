@@ -11,19 +11,13 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as EditProductImport } from './routes/edit-product'
 import { Route as AddImport } from './routes/add'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProductIndexImport } from './routes/product.index'
 import { Route as ProductIdImport } from './routes/product.$id'
+import { Route as EditIdImport } from './routes/edit.$id'
 
 // Create/Update Routes
-
-const EditProductRoute = EditProductImport.update({
-  id: '/edit-product',
-  path: '/edit-product',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AddRoute = AddImport.update({
   id: '/add',
@@ -49,6 +43,12 @@ const ProductIdRoute = ProductIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EditIdRoute = EditIdImport.update({
+  id: '/edit/$id',
+  path: '/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -67,11 +67,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AddImport
       parentRoute: typeof rootRoute
     }
-    '/edit-product': {
-      id: '/edit-product'
-      path: '/edit-product'
-      fullPath: '/edit-product'
-      preLoaderRoute: typeof EditProductImport
+    '/edit/$id': {
+      id: '/edit/$id'
+      path: '/edit/$id'
+      fullPath: '/edit/$id'
+      preLoaderRoute: typeof EditIdImport
       parentRoute: typeof rootRoute
     }
     '/product/$id': {
@@ -96,7 +96,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
-  '/edit-product': typeof EditProductRoute
+  '/edit/$id': typeof EditIdRoute
   '/product/$id': typeof ProductIdRoute
   '/product': typeof ProductIndexRoute
 }
@@ -104,7 +104,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
-  '/edit-product': typeof EditProductRoute
+  '/edit/$id': typeof EditIdRoute
   '/product/$id': typeof ProductIdRoute
   '/product': typeof ProductIndexRoute
 }
@@ -113,24 +113,24 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/add': typeof AddRoute
-  '/edit-product': typeof EditProductRoute
+  '/edit/$id': typeof EditIdRoute
   '/product/$id': typeof ProductIdRoute
   '/product/': typeof ProductIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add' | '/edit-product' | '/product/$id' | '/product'
+  fullPaths: '/' | '/add' | '/edit/$id' | '/product/$id' | '/product'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add' | '/edit-product' | '/product/$id' | '/product'
-  id: '__root__' | '/' | '/add' | '/edit-product' | '/product/$id' | '/product/'
+  to: '/' | '/add' | '/edit/$id' | '/product/$id' | '/product'
+  id: '__root__' | '/' | '/add' | '/edit/$id' | '/product/$id' | '/product/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddRoute: typeof AddRoute
-  EditProductRoute: typeof EditProductRoute
+  EditIdRoute: typeof EditIdRoute
   ProductIdRoute: typeof ProductIdRoute
   ProductIndexRoute: typeof ProductIndexRoute
 }
@@ -138,7 +138,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddRoute: AddRoute,
-  EditProductRoute: EditProductRoute,
+  EditIdRoute: EditIdRoute,
   ProductIdRoute: ProductIdRoute,
   ProductIndexRoute: ProductIndexRoute,
 }
@@ -155,7 +155,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/add",
-        "/edit-product",
+        "/edit/$id",
         "/product/$id",
         "/product/"
       ]
@@ -166,8 +166,8 @@ export const routeTree = rootRoute
     "/add": {
       "filePath": "add.tsx"
     },
-    "/edit-product": {
-      "filePath": "edit-product.tsx"
+    "/edit/$id": {
+      "filePath": "edit.$id.tsx"
     },
     "/product/$id": {
       "filePath": "product.$id.tsx"

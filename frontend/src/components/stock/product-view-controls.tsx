@@ -16,10 +16,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DatePickerWithRange } from "../ui/date-picker-with-range";
 import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useProductId } from "@/hooks/useProductId";
 
 export default function ProductViewControls() {
   const navigate = useNavigate();
   const pathname = useLocation().pathname;
+  const id = useProductId();
   return (
     <div className="flex ">
       <DatePickerWithRange route="/product/$id" />
@@ -45,7 +47,7 @@ export default function ProductViewControls() {
           align="end"
           className="rounded-lg flex flex-col gap-2 p-4"
         >
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate({ to: "/edit/" + id })}>
             <Pencil />
             Editar
           </DropdownMenuItem>

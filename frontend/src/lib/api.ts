@@ -118,18 +118,17 @@ export async function getProductById(productId: number): Promise<Product> {
 export async function updateProduct(
   productId: number,
   updatedProduct: {
-    id: number;
     name: string;
     description?: string;
     stock: number;
     unitPrice: number;
     categoryId: number;
   }
-): Promise<ProductResponse> {
+): Promise<CreateProductResponse> {
   if (productId < 1) {
     throw new Error("Parâmetro inválido: productId deve ser maior que 0");
   }
-  return apiFetch<ProductResponse>(`/products/${productId}`, {
+  return apiFetch<CreateProductResponse>(`/products/${productId}`, {
     method: "PUT",
     body: JSON.stringify(updatedProduct),
   });

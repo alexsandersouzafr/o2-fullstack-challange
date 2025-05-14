@@ -20,13 +20,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { createProduct, getCategories } from "@/lib/api";
+import {
+  createProduct,
+  getCategories,
+  getProductById,
+  updateProduct,
+} from "@/lib/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChevronLeftCircle } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import type { Category } from "@/lib/types";
 
-export const createProductSchema = z.object({
+export const productSchema = z.object({
   name: z
     .string()
     .min(1, "O nome do produto é obrigatório")
@@ -51,18 +56,34 @@ export const createProductSchema = z.object({
     .describe("ID da categoria do produto"),
 });
 
-type CreateProductSchemaType = z.infer<typeof createProductSchema>;
+type ProductSchemaType = z.infer<typeof productSchema>;
 
-export function CreateProductForm() {
-  const form = useForm<CreateProductSchemaType>({
-    resolver: zodResolver(createProductSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      stock: 0,
-      unitPrice: 0,
-      categoryId: undefined,
-    },
+export function ProductForm({
+  editMode = false,
+  id,
+}: {
+  editMode?: boolean;
+  id?: number;
+}) {
+  const navigate = useNavigate();
+
+  const { data } = useQuery({
+    queryKey: ["editValues"],
+    queryFn: () => getProductById(id!),
+    enabled: editMode && !!id,
+  });
+
+  const defaultValues: ProductSchemaType = {
+    name: data?.name || "",
+    description: data?.description || "",
+    stock: data?.stock || 0,
+    unitPrice: data?.unitPrice || 0,
+    categoryId: data?.categoryId || 0,
+  };
+
+  const form = useForm<ProductSchemaType>({
+    resolver: zodResolver(productSchema),
+    defaultValues: defaultValues,
   });
 
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
@@ -77,17 +98,20 @@ export function CreateProductForm() {
     isSuccess,
     data: postRes,
   } = useMutation({
-    mutationFn: createProduct,
+    mutationFn: (data: ProductSchemaType) =>
+      editMode ? updateProduct(id!, data) : createProduct(data),
   });
 
-  const onSubmit = (data: CreateProductSchemaType) => mutate(data);
-
-  const navigate = useNavigate();
+  const onSubmit = (data: ProductSchemaType) => mutate(data);
 
   return (
     <div className="flex border rounded-lg p-8">
       <div className="flex flex-col gap-4 w-1/4 border-r">
-        <h2 className="text-lg ">Cadastrar novo produto</h2>
+        <h2 className="text-lg pr-8">
+          {editMode
+            ? `Editando ${defaultValues.name}`
+            : "Cadastrar novo produto"}
+        </h2>
         <Button
           size="default"
           variant="secondary"
@@ -101,8 +125,8 @@ export function CreateProductForm() {
       {isPending && "Carregando"}
       {isSuccess && (
         <div className="p-8 flex flex-col gap-4">
-          Produto adicionado com sucesso. Clique em 'continuar' para ver
-          detalhes.
+          Produto {editMode ? "atualizado" : "adicionado"} com sucesso. Clique
+          em 'continuar' para ver detalhes.
           <Button
             className="w-fit"
             onClick={() => navigate({ to: `/product/${postRes.id}` })}
