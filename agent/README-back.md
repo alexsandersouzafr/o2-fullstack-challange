@@ -1,3 +1,6 @@
 # Agent
 
-Coloque aqui as instruções para inicializar o agente de IA
+docker-compose-up
+docker exec -it ollama bash
+ollama pull phi4-mini:3.8b
+ollama list

@@ -8,7 +8,6 @@ import { ChevronLeftCircle } from "lucide-react";
 import ProductViewControls from "./product-view-controls";
 import { categoryStyles } from "@/lib/categories";
 import CategoryBadge from "../ui/category-badge";
-import { Card } from "../ui/card";
 import Metrics from "./metrics";
 import { useDateRangeSearchParams } from "@/hooks/useDateRangeSearchParams";
 
@@ -40,7 +39,17 @@ export default function ProductView({ id }: { id: number }) {
 
   if (productData && categoriesData && movementsData)
     return (
-      <Card className="rounded-lg border p-8 gap-8 flex flex-col">
+      <div className="rounded-lg border p-8 gap-8 flex flex-col shadow-md">
+        <div className="flex gap-2">
+          <Button
+            className="w-fit"
+            onClick={() => navigate({ to: "/product" })}
+          >
+            <ChevronLeftCircle />
+            Voltar
+          </Button>
+          <ProductViewControls />
+        </div>
         <div className="flex flex-col">
           <div className="flex gap-4 items-end">
             <h2 className="text-2xl font-bold">{productData?.name}</h2>
@@ -52,21 +61,10 @@ export default function ProductView({ id }: { id: number }) {
           </div>
           <p>{productData.description}</p>
         </div>
-        <hr />
-        <div className="flex gap-2">
-          <Button
-            className="w-fit"
-            onClick={() => navigate({ to: "/product" })}
-          >
-            <ChevronLeftCircle />
-            Voltar
-          </Button>
-          <ProductViewControls />
-        </div>
         <div className="flex gap-8">
           <Metrics movementsData={movementsData} productData={productData} />
           <Chart id={parseInt(id.toString())} className="w-1/2" />
         </div>
-      </Card>
+      </div>
     );
 }

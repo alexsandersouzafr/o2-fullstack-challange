@@ -32,7 +32,7 @@ async function seedDatabase() {
           name: faker.commerce.productName(),
           description: faker.commerce.productDescription(),
           stock: faker.number.int({ min: 0, max: 1000 }),
-          unitPrice: parseFloat(faker.commerce.price({ min: 1, max: 1000 })),
+          unitPrice: parseFloat(faker.commerce.price({ min: 1, max: 50 })),
           categoryId: category.id,
         },
       });
@@ -42,7 +42,7 @@ async function seedDatabase() {
     for (let i = 0; i < 200; i++) {
       const product = faker.helpers.arrayElement(products);
       const type = faker.helpers.arrayElement(['ENTRY', 'EXIT'] as const);
-      const quantity = faker.number.int({ min: 1, max: 100 });
+      const quantity = faker.number.int({ min: 1, max: 30 });
       const totalValue = quantity * product.unitPrice;
 
       await prisma.movement.create({

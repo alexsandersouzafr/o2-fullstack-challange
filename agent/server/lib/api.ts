@@ -6,9 +6,9 @@ import type {
   ProductResponse,
   StockTotals,
   TopProduct,
-} from "./types";
+} from "./types.ts";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL as string;
+const API_BASE_URL = "http://localhost:3000";
 const REQUEST_TIMEOUT = 10000; // 10 seconds
 
 const JSON_HEADERS = {
@@ -48,7 +48,9 @@ async function apiFetch<T>(
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
       throw new Error(
-        `Requisição para ${endpoint} excedeu o tempo limite de ${REQUEST_TIMEOUT / 1000} segundos`
+        `Requisição para ${endpoint} excedeu o tempo limite de ${
+          REQUEST_TIMEOUT / 1000
+        } segundos`
       );
     }
     throw error instanceof Error
@@ -147,19 +149,23 @@ export async function getCategories(): Promise<Category[]> {
   return apiFetch<Category[]>("/categories");
 }
 
-export async function createStockMovement(movement: {
-  productId: number;
-  quantity: number;
-  type: "ENTRY" | "EXIT";
-}): Promise<MovementsResponse> {
-  if (movement.productId < 1 || movement.quantity < 0) {
+export async function createStockMovement(
+  productId: number,
+  quantity: number,
+  type: "ENTRY" | "EXIT"
+): Promise<MovementsResponse> {
+  if (productId < 1 || quantity < 0) {
     throw new Error(
       "Parâmetros inválidos: productId deve ser maior que 0 e quantity não pode ser negativo"
     );
   }
   return apiFetch<MovementsResponse>("/movements", {
     method: "POST",
-    body: JSON.stringify(movement),
+    body: JSON.stringify({
+      productId,
+      quantity,
+      type,
+    }),
   });
 }
 

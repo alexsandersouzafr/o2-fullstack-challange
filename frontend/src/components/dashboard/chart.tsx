@@ -75,13 +75,16 @@ export function Chart({ id, className }: { id?: number; className?: string }) {
             <AreaChart accessibilityLayer data={chartData}>
               <CartesianGrid vertical={false} />
               <Tooltip
+                wrapperClassName="rounded-lg shadow-lg"
                 formatter={(value, name) => [
                   `${value} unidades`,
                   name === "entry" ? "Entrada" : "Saída",
                 ]}
-                labelFormatter={(value) =>
-                  `Data: ${new Date(value).toLocaleString()}`
-                }
+                labelFormatter={(value) => (
+                  <span className="text-foreground dark:text-black">
+                    Data: {new Date(value).toLocaleString()}
+                  </span>
+                )}
               />
               <Area
                 dataKey="entry"
