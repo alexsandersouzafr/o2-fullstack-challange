@@ -10,6 +10,7 @@ import {
 } from "../ui/dialog";
 import { deleteProduct } from "@/lib/api";
 import { Spinner } from "../ui/spinner";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 export default function DeleteDialog({ id }: { id: number }) {
   const { mutate, isPending, isSuccess, isError } = useMutation({
@@ -17,6 +18,9 @@ export default function DeleteDialog({ id }: { id: number }) {
   });
 
   const isDefault = !isSuccess && !isError && !isPending;
+
+  const navigate = useNavigate();
+  const pathname = useLocation().pathname;
 
   return (
     <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
@@ -36,10 +40,18 @@ export default function DeleteDialog({ id }: { id: number }) {
             Deletar permanentemente
           </Button>
         )}
-        <DialogClose>
-          <Button disabled={isPending}>
-            {isSuccess || isError ? "Voltar" : "Cancelar"}
-          </Button>
+        <DialogClose
+          variant="secondary"
+          disabled={isPending}
+          onClick={() =>
+            isSuccess &&
+            navigate({
+              to: pathname.startsWith("/product/") ? "/product" : pathname,
+              reloadDocument: true,
+            })
+          }
+        >
+          {isSuccess || isError ? "Voltar" : "Cancelar"}
         </DialogClose>
       </DialogFooter>
     </DialogContent>

@@ -42,8 +42,6 @@ async function apiFetch<T>(
       throw new Error(`Erro na requisição para ${endpoint}: ${message}`);
     }
 
-    console.log("fetched:", endpoint);
-
     return res.json() as Promise<T>;
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {

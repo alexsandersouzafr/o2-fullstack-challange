@@ -1,27 +1,16 @@
-import {
-  ArrowRightLeft,
-  FilterX,
-  PackageMinus,
-  PackagePlus,
-  Pencil,
-  Settings,
-  Trash,
-} from "lucide-react";
+import { ArrowRightLeft, FilterX, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DatePickerWithRange } from "../ui/date-picker-with-range";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useProductId } from "@/hooks/useProductId";
+import { Dialog, DialogTrigger } from "../ui/dialog";
+import DeleteDialog from "./delete-dialog";
+import MovementDialog from "./movement-dialog";
 
 export default function ProductViewControls() {
   const navigate = useNavigate();
   const pathname = useLocation().pathname;
-  const id = useProductId();
+  const id = useProductId() || 0;
   return (
     <div className="flex ">
       <DatePickerWithRange route="/product/$id" />
@@ -33,55 +22,30 @@ export default function ProductViewControls() {
         <FilterX />
         Limpar Filtro
       </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="secondary"
-            className="rounded-none border-l border-r"
-          >
-            <span className="sr-only">Ações</span>
-            <Settings /> Ações
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          className="rounded-lg flex flex-col gap-2 p-4"
-        >
-          <DropdownMenuItem onClick={() => navigate({ to: "/edit/" + id })}>
-            <Pencil />
-            Editar
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Trash />
-            Excluir
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="secondary"
-            className="rounded-l-none rounded-r-lg border-l border-r"
-          >
-            <span className="sr-only">Nova movimentação</span>
-            <ArrowRightLeft />
-            Nova movimentação
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          className="rounded-lg flex flex-col gap-2 p-4"
-        >
-          <DropdownMenuItem>
-            <PackagePlus />
-            Nova entrada
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <PackageMinus />
-            Nova saída
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button
+        variant="secondary"
+        className=" border-l border-r rounded-none gap-2 p-4"
+        onClick={() =>
+          navigate({ to: "/edit/$id", params: { id: id?.toString() } })
+        }
+      >
+        <Pencil />
+        Editar
+      </Button>
+      <Dialog>
+        <DialogTrigger className="inline-flex items-center rounded-none border-l border-r bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 h-9 px-6 py-2 has-[>svg]:px-6 justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+          <Trash />
+          Excluir
+        </DialogTrigger>
+        <DeleteDialog id={id} />
+      </Dialog>
+      <Dialog>
+        <DialogTrigger className="inline-flex items-center rounded-l-none rounded-r-lg border-l border-r bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 h-9 px-6 py-2 has-[>svg]:px-6 justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive">
+          <ArrowRightLeft />
+          Nova movimentação
+        </DialogTrigger>
+        <MovementDialog productId={id} />
+      </Dialog>
     </div>
   );
 }
