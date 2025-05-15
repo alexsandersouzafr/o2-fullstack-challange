@@ -50,7 +50,7 @@ export function Chart({ id, className }: { id?: number; className?: string }) {
     : [];
 
   return (
-    <Card className={cn("w-[70%]", className)}>
+    <Card className={cn("h-full flex", className)}>
       <CardHeader>
         <CardTitle>Movimentações do Estoque</CardTitle>
         <CardDescription>
@@ -71,42 +71,42 @@ export function Chart({ id, className }: { id?: number; className?: string }) {
           .
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-full">
+      <CardContent className="grow">
         {error || !chartData.length ? (
           <div className="grow">Sem resultados.</div>
         ) : (
-          <ChartContainer config={chartConfig} className="h-52 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <Tooltip
-                  wrapperClassName="rounded-lg shadow-lg"
-                  formatter={(value, name) => [
-                    `${value} unidades`,
-                    name === "entry" ? "Entrada" : "Saída",
-                  ]}
-                  labelFormatter={(value) => (
-                    <span className="text-foreground dark:text-black">
-                      Data: {new Date(value).toLocaleString()}
-                    </span>
-                  )}
-                />
-                <Area
-                  dataKey="entry"
-                  type="natural"
-                  fill="var(--primary)"
-                  fillOpacity={0.4}
-                  stroke="var(--primary)"
-                />
-                <Area
-                  dataKey="exit"
-                  type="natural"
-                  fill="var(--primary)"
-                  fillOpacity={0.4}
-                  stroke="var(--primary)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+          <ChartContainer
+            config={chartConfig}
+            className="h-52 flex items-center w-full"
+          >
+            <AreaChart accessibilityLayer data={chartData}>
+              <Tooltip
+                wrapperClassName="rounded-lg shadow-lg"
+                formatter={(value, name) => [
+                  `${value} unidades`,
+                  name === "entry" ? "Entrada" : "Saída",
+                ]}
+                labelFormatter={(value) => (
+                  <span className="text-foreground dark:text-black">
+                    Data: {new Date(value).toLocaleString()}
+                  </span>
+                )}
+              />
+              <Area
+                dataKey="entry"
+                type="natural"
+                fill="var(--primary)"
+                fillOpacity={0.4}
+                stroke="var(--primary)"
+              />
+              <Area
+                dataKey="exit"
+                type="natural"
+                fill="var(--primary)"
+                fillOpacity={0.4}
+                stroke="var(--primary)"
+              />
+            </AreaChart>
           </ChartContainer>
         )}
       </CardContent>

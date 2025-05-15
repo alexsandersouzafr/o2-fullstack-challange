@@ -61,9 +61,9 @@ export default function ProductView({ id }: { id: number }) {
           </div>
           <p>{productData.description}</p>
         </div>
-        <div className="flex gap-8">
+        <div className="grid grid-cols-2 gap-8 h-full">
           <Metrics movementsData={movementsData} productData={productData} />
-          <Chart id={parseInt(id.toString())} className="w-1/2" />
+          <Chart id={parseInt(id.toString())} />
         </div>
       </div>
     );

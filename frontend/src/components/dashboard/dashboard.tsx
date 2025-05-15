@@ -9,7 +9,7 @@ export default function Dashboard() {
       <div className="flex gap-8 flex-col">
         <MetricHighlights />
         <div className="flex gap-8 w-full">
-          <Chart />
+          <Chart className="w-[66%] h-[398px]" />
           <TopProducts />
         </div>
       </div>

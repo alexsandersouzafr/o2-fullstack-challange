@@ -35,7 +35,7 @@ export default function ActionMenu({ id }: { id: number }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="rounded-lg flex flex-col gap-2 p-4"
+          className="rounded-lg flex flex-col gap-2 p-2"
         >
           <div>
             <DropdownMenuLabel>Ações</DropdownMenuLabel>

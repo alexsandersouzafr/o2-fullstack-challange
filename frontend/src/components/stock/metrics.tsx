@@ -15,7 +15,7 @@ export default function Metrics({
 }) {
   const { date } = useDateRangeSearchParams();
   return (
-    <div className="grid grid-cols-2 gap-8 w-1/2">
+    <div className="grid grid-cols-2 gap-8">
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
         title="Total de vendas:"
