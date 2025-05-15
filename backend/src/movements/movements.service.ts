@@ -25,7 +25,7 @@ export class MovementsService {
 
     if (type === 'EXIT' && product.stock < quantity) {
       throw new BadRequestException(
-        `Insufficient stock for product ${productId}. Available: ${product.stock}, Requested: ${quantity}`,
+        `Você solicitou mais produtos do que o disponível em estoque. Disponível: ${product.stock}. Solicitado: ${quantity}.`,
       );
     }
 
@@ -93,6 +93,10 @@ export class MovementsService {
       Number(
         totals.find((movement) => movement.type === 'EXIT')?._sum?.quantity,
       ) || 0;
+    const totalItemsBought =
+      Number(
+        totals.find((movement) => movement.type === 'ENTRY')?._sum?.quantity,
+      ) || 0;
 
     return {
       movements,
@@ -100,6 +104,7 @@ export class MovementsService {
         entry: entryTotal,
         exit: exitTotal,
         totalItemsSold,
+        totalItemsBought,
       },
     };
   }

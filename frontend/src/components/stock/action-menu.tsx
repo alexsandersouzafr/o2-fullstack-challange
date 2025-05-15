@@ -1,6 +1,6 @@
 import {
   ArrowLeftRight,
-  BarChartIcon as ChartNoAxesCombined,
+  ChartNoAxesCombined,
   MoreHorizontal,
   Pencil,
   Trash,

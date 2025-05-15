@@ -40,7 +40,7 @@ export const stockMovementSchema = z.object({
 });
 
 export default function MovementDialog({ productId }: { productId: number }) {
-  const { mutate, isPending, isSuccess, isError } = useMutation({
+  const { mutate, isPending, isSuccess, isError, error, reset } = useMutation({
     mutationFn: ({ quantity, type }: StockMvementSchemaType) =>
       createStockMovement({ productId, quantity, type }),
   });
@@ -70,12 +70,12 @@ export default function MovementDialog({ productId }: { productId: number }) {
       <DialogHeader>
         <DialogTitle>Movimentação de estoque</DialogTitle>
         {isSuccess && "Movimentação aplicada com sucesso."}
-        {isError && "Erro ao movimentar estoque."}
+        {isError && <>Erro ao movimentar estoque. {error.message}</>}
         {isPending && <Spinner />}
         {isDefault && (
           <DialogDescription>
-            Para fazer uma movimentação, selecione o tipo de movimentação e a
-            quantidade de itens que deseja movimentar.
+            Escolha a quantidade de produtos que deseja movimentar e o tipo de
+            movimentação.
           </DialogDescription>
         )}
       </DialogHeader>
@@ -144,12 +144,13 @@ export default function MovementDialog({ productId }: { productId: number }) {
               variant="secondary"
               disabled={isPending}
               onClick={() =>
-                isSuccess &&
-                navigate({
-                  to: "/product/$id",
-                  params: { id: productId.toString() },
-                  reloadDocument: true,
-                })
+                isSuccess
+                  ? navigate({
+                      to: "/product/$id",
+                      params: { id: productId.toString() },
+                      reloadDocument: true,
+                    })
+                  : reset()
               }
             >
               {isSuccess || isError ? "Voltar" : "Cancelar"}

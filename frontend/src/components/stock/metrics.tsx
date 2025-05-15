@@ -25,8 +25,9 @@ export default function Metrics({
       />
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
-        title="Quantidade em estoque:"
-        value={productData.stock.toString()}
+        title="Total de compras:"
+        value={currencyFormatter(movementsData.totals.entry).toString()}
+        filtered={date?.from && date?.to !== undefined}
       />
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
@@ -34,12 +35,16 @@ export default function Metrics({
         value={movementsData.totals.totalItemsSold.toString()}
         filtered={date?.from && date?.to !== undefined}
       />
-
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
         title="Itens comprados:"
-        value={movementsData.totals.entry.toString()}
+        value={movementsData.totals.totalItemsBought.toString()}
         filtered={date?.from && date?.to !== undefined}
+      />
+      <MetricCard
+        className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"
+        title="Quantidade em estoque:"
+        value={productData.stock.toString()}
       />
       <MetricCard
         className="h-24 [&>*>span]:text-2xl [&>*>h3]:text-sm"

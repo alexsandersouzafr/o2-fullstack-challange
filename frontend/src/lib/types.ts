@@ -53,6 +53,7 @@ export interface MovementsResponse {
     entry: number;
     exit: number;
     totalItemsSold: number;
+    totalItemsBought: number;
   };
 }
 
