@@ -5,9 +5,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CategoriesController } from './categories/categories.controller';
 import { CategoriesService } from './categories/categories.service';
 import { CategoriesModule } from './categories/categories.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
-  imports: [ProductsModule, MovementsModule, CategoriesModule],
+  imports: [ProductsModule, MovementsModule, CategoriesModule, AiModule],
   controllers: [CategoriesController],
   providers: [PrismaService, CategoriesService],
 })

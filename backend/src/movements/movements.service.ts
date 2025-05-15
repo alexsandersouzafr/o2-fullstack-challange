@@ -5,12 +5,18 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateMovementDto } from './dto/create-movement.dto';
+import { CreateMovementResponseDto } from './dto/create-movement-response.dto';
+import { MovementResponseDto } from './dto/movement-response.dto';
 
 @Injectable()
 export class MovementsService {
   constructor(private prisma: PrismaService) {}
 
-  async create({ productId, quantity, type }: CreateMovementDto) {
+  async create({
+    productId,
+    quantity,
+    type,
+  }: CreateMovementDto): Promise<CreateMovementResponseDto> {
     const product = await this.prisma.product.findUnique({
       where: { id: productId },
     });
@@ -51,7 +57,7 @@ export class MovementsService {
     productId: number | undefined,
     startDate: Date,
     endDate: Date,
-  ) {
+  ): Promise<MovementResponseDto> {
     const movements = await this.prisma.movement.findMany({
       where: {
         ...(productId !== undefined && { productId: Number(productId) }),

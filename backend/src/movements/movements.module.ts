@@ -6,5 +6,6 @@ import { PrismaService } from 'prisma/prisma.service';
 @Module({
   providers: [PrismaService, MovementsService],
   controllers: [MovementsController],
+  exports: [MovementsService],
 })
 export class MovementsModule {}
