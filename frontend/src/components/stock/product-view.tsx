@@ -2,7 +2,7 @@ import { getCategories, getMovements, getProductById } from "@/lib/api";
 import type { Category } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { Chart } from "@/components/dashboard/chart";
+import { Chart } from "@/components/dashboard/dashboard-chart";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftCircle } from "lucide-react";
 import ProductViewControls from "./product-view-controls";

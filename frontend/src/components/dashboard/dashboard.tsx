@@ -1,5 +1,5 @@
 import TopProducts from "./top-products";
-import { Chart } from "./chart";
+import { Chart } from "./dashboard-chart";
 import Filters from "./filters";
 import MetricHighlights from "./metric-highlights";
 

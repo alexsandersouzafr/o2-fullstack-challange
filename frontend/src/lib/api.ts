@@ -59,13 +59,25 @@ async function apiFetch<T>(
 
 // API Functions
 export async function getStockTotals(
-  startDate?: string,
-  endDate?: string
+  startDate?: Date,
+  endDate?: Date
 ): Promise<StockTotals> {
-  const params = new URLSearchParams({
-    startDate: startDate?.toString() || "",
-    endDate: endDate?.toString() || "",
-  });
+  const params = new URLSearchParams();
+
+  if (startDate) {
+    if (isNaN(startDate.getTime())) {
+      throw new Error("Parâmetro inválido: startDate deve ser uma data válida");
+    }
+    params.append("startDate", startDate.toISOString());
+  }
+
+  if (endDate) {
+    if (isNaN(endDate.getTime())) {
+      throw new Error("Parâmetro inválido: endDate deve ser uma data válida");
+    }
+    params.append("endDate", endDate.toISOString());
+  }
+
   return apiFetch<StockTotals>(`/products/stock-totals?${params.toString()}`);
 }
 

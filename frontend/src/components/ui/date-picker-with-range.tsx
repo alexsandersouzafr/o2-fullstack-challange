@@ -31,7 +31,14 @@ export function DatePickerWithRange({
   const handleSetDate = () => {
     setOpen(false);
     navigate({
-      to: route as Routes,
+      to: route as
+        | "/product/$id"
+        | "/"
+        | "/add"
+        | "/product"
+        | "."
+        | ".."
+        | "/edit/$id",
       search: {
         startDate: date?.from?.toString(),
         endDate: date?.to?.toString(),

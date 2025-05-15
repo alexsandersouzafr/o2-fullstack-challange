@@ -24,6 +24,7 @@ export function useDateRangeSearchParams() {
       from: startDate ? new Date(startDate as string) : undefined,
       to: endDate ? new Date(endDate as string) : undefined,
     });
+    console.log("date update", routeId, date);
   }, [startDate, endDate]);
 
   return { date, setDate };

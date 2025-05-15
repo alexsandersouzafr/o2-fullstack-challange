@@ -10,7 +10,7 @@ export default function MetricHighlights() {
 
   const { data: metrics } = useQuery({
     queryKey: ["dashboardMetrics", date],
-    queryFn: () => getStockTotals(date?.from?.toString(), date?.to?.toString()),
+    queryFn: () => getStockTotals(date?.from, date?.to),
   });
 
   const cardsData = [
