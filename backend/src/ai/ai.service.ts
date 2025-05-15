@@ -4,9 +4,6 @@ import { tools } from './ai.tools';
 import { ProductsService } from 'src/products/products.service';
 import { MovementsService } from 'src/movements/movements.service';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateMovementDto } from 'src/movements/dto/create-movement.dto';
-import { MovementResponseDto } from 'src/movements/dto/movement-response.dto';
-import { CreateMovementResponseDto } from 'src/movements/dto/create-movement-response.dto';
 
 @Injectable()
 export class AiService {
