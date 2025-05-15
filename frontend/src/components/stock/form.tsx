@@ -30,6 +30,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ChevronLeftCircle } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import type { Category } from "@/lib/types";
+import { Spinner } from "../ui/spinner";
 
 export const productSchema = z.object({
   name: z
@@ -108,9 +109,15 @@ export function ProductForm({
     <div className="flex border rounded-lg p-8">
       <div className="flex flex-col gap-4 w-1/4 border-r">
         <h2 className="text-lg pr-8">
-          {editMode
-            ? `Editando ${defaultValues.name}`
-            : "Cadastrar novo produto"}
+          {editMode ? (
+            <>
+              <strong>Editando</strong>
+              <br />
+              {defaultValues.name}
+            </>
+          ) : (
+            "Cadastrar novo produto"
+          )}
         </h2>
         <Button
           size="default"
@@ -122,7 +129,7 @@ export function ProductForm({
           Voltar
         </Button>
       </div>
-      {isPending && "Carregando"}
+      {isPending && <Spinner />}
       {isSuccess && (
         <div className="p-8 flex flex-col gap-4">
           Produto {editMode ? "atualizado" : "adicionado"} com sucesso. Clique
@@ -259,8 +266,8 @@ export function ProductForm({
               )}
             />
 
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Criando..." : "Criar Produto"}
+            <Button type="submit" disabled={isPending}>
+              {editMode ? "Aplicar Alterações" : "Criar Produto"}
             </Button>
           </form>
         </Form>
