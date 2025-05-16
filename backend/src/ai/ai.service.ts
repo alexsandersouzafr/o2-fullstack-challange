@@ -74,6 +74,7 @@ export class AiService {
 
       const function_response_part = {
         name: tool_call.name,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         response: { result },
       };
 

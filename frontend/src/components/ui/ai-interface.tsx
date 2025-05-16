@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 
 import { Send, Sparkles } from "lucide-react";
@@ -13,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SetStateAction } from "react";
 import { promptAi } from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
 import type { Content } from "@google/genai";
@@ -26,17 +24,18 @@ export default function AiInterface() {
   const [open, setOpen] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Use mutation instead of query for better control
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: promptAi,
     onSuccess: (data) => {
       if (data?.candidates?.[0]?.content) {
-        setChat((prev) => [...prev, data.candidates[0].content]);
+        setChat(((prev) => [
+          ...prev,
+          data.candidates && data.candidates[0].content,
+        ]) as SetStateAction<Content[]>);
       }
     },
   });
 
-  // Scroll to bottom whenever chat updates
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -44,7 +43,6 @@ export default function AiInterface() {
     }
   }, [chat]);
 
-  // Reset chat when dialog closes
   useEffect(() => {
     if (!open) {
       setChat([]);
@@ -52,17 +50,13 @@ export default function AiInterface() {
   }, [open]);
 
   function handleSendMessage() {
-    // Don't send empty messages
     if (!inputValue.trim()) return;
 
-    // Add user message to chat
     const userMessage = { parts: [{ text: inputValue }], role: "user" };
     setChat((prev) => [...prev, userMessage]);
 
-    // Send to AI
     mutate(inputValue);
 
-    // Clear input
     setInputValue("");
   }
 
@@ -97,7 +91,6 @@ export default function AiInterface() {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Chat container with auto-scroll */}
         <div
           ref={chatContainerRef}
           className="h-[350px] border rounded-lg flex flex-col gap-3 p-4 bg-secondary/30 overflow-y-auto text-sm mb-4 scroll-smooth"
@@ -154,7 +147,6 @@ export default function AiInterface() {
           )}
         </div>
 
-        {/* Input area */}
         <div className="flex gap-2 items-center">
           <Input
             disabled={isPending}

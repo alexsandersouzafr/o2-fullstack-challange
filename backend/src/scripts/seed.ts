@@ -24,45 +24,45 @@ async function seedDatabase() {
       prisma.category.create({ data: { name: 'Livros' } }),
     ]);
 
-    // const products: Product[] = [];
-    // for (let i = 0; i < 100; i++) {
-    //   const category = faker.helpers.arrayElement(categories);
-    //   const product = await prisma.product.create({
-    //     data: {
-    //       name: faker.commerce.productName(),
-    //       description: faker.commerce.productDescription(),
-    //       stock: faker.number.int({ min: 0, max: 1000 }),
-    //       unitPrice: parseFloat(faker.commerce.price({ min: 1, max: 50 })),
-    //       categoryId: category.id,
-    //     },
-    //   });
-    //   products.push(product);
-    // }
+    const products: Product[] = [];
+    for (let i = 0; i < 100; i++) {
+      const category = faker.helpers.arrayElement(categories);
+      const product = await prisma.product.create({
+        data: {
+          name: faker.commerce.productName(),
+          description: faker.commerce.productDescription(),
+          stock: faker.number.int({ min: 0, max: 1000 }),
+          unitPrice: parseFloat(faker.commerce.price({ min: 1, max: 50 })),
+          categoryId: category.id,
+        },
+      });
+      products.push(product);
+    }
 
-    // for (let i = 0; i < 200; i++) {
-    //   const product = faker.helpers.arrayElement(products);
-    //   const type = faker.helpers.arrayElement(['ENTRY', 'EXIT'] as const);
-    //   const quantity = faker.number.int({ min: 1, max: 30 });
-    //   const totalValue = quantity * product.unitPrice;
+    for (let i = 0; i < 200; i++) {
+      const product = faker.helpers.arrayElement(products);
+      const type = faker.helpers.arrayElement(['ENTRY', 'EXIT'] as const);
+      const quantity = faker.number.int({ min: 1, max: 30 });
+      const totalValue = quantity * product.unitPrice;
 
-    //   await prisma.movement.create({
-    //     data: {
-    //       productId: product.id,
-    //       quantity,
-    //       totalValue,
-    //       type,
-    //       date: faker.date.recent({ days: 30 }),
-    //     },
-    //   });
+      await prisma.movement.create({
+        data: {
+          productId: product.id,
+          quantity,
+          totalValue,
+          type,
+          date: faker.date.recent({ days: 30 }),
+        },
+      });
 
-    //   const newStock =
-    //     type === 'ENTRY' ? product.stock + quantity : product.stock - quantity;
+      const newStock =
+        type === 'ENTRY' ? product.stock + quantity : product.stock - quantity;
 
-    //   await prisma.product.update({
-    //     where: { id: product.id },
-    //     data: { stock: newStock },
-    //   });
-    // }
+      await prisma.product.update({
+        where: { id: product.id },
+        data: { stock: newStock },
+      });
+    }
 
     console.log('Seed completed successfully!');
   } catch (error) {
