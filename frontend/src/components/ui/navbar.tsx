@@ -1,9 +1,9 @@
 import { CircleGauge, PackageSearch } from "lucide-react";
 
-import { Sparkles } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "./button";
 import { useNavigate } from "@tanstack/react-router";
+import AiInterface from "./ai-interface";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -26,10 +26,7 @@ export default function Navbar() {
           Produtos
         </Button>
       </div>
-      <Button className="px-5">
-        <Sparkles className="h-[1.2rem] w-[1.2rem] transition-all" /> Ajuda da
-        IA
-      </Button>
+      <AiInterface />
     </nav>
   );
 }

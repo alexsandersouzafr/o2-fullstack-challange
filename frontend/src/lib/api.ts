@@ -7,6 +7,7 @@ import type {
   StockTotals,
   TopProduct,
 } from "./types";
+import { GenerateContentResponse } from "@google/genai";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL as string;
 const REQUEST_TIMEOUT = 10000; // 10 seconds
@@ -58,6 +59,13 @@ async function apiFetch<T>(
 }
 
 // API Functions
+export async function promptAi(text: string): Promise<GenerateContentResponse> {
+  return apiFetch<GenerateContentResponse>("/ai", {
+    method: "POST",
+    body: JSON.stringify({ text: text }),
+  });
+}
+
 export async function getStockTotals(
   startDate?: Date,
   endDate?: Date

@@ -9,14 +9,13 @@ export const tools: Tool[] = [
     parameters: {
       type: Type.OBJECT,
       properties: {
-        id: { type: Type.INTEGER, description: 'Id de um produto' },
         startDate: {
           type: Type.STRING,
-          description: 'Data inicial no formato YYYY-MM-DD',
+          description: 'Data inicial no formato dd/mm/yyyy ou dd-mm-yyyy',
         },
         endDate: {
           type: Type.STRING,
-          description: 'Data final no formato YYYY-MM-DD',
+          description: 'Data final no formato dd/mm/yyyy ou dd-mm-yyyy',
         },
       },
       required: ['startDate', 'endDate'],

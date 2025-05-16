@@ -70,6 +70,8 @@ export class AiService {
         }
       }
 
+      console.log(result);
+
       const function_response_part = {
         name: tool_call.name,
         response: { result },

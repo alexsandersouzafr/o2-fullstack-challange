@@ -13,9 +13,19 @@ function Dialog({
 }
 
 function DialogTrigger({
+  variant,
+  size,
+  className,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
-  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
+}: React.ComponentProps<typeof DialogPrimitive.Trigger> &
+  VariantProps<typeof buttonVariants>) {
+  return (
+    <DialogPrimitive.Trigger
+      data-slot="dialog-trigger"
+      {...props}
+      className={cn(buttonVariants({ variant, size, className }))}
+    />
+  );
 }
 
 function DialogPortal({
