@@ -69,3 +69,5 @@ Siga os passos abaixo a partir da raiz do repositório:
    ```bash
    node dist/src/main
    ```
+9. **Documentação da API pelo Swagger**  
+   Acesse http://localhost:3000/api
