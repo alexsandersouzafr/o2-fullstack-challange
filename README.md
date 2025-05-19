@@ -1,44 +1,7 @@
-# O2 Fullstack Challenge
+# Stock Dashboard
 
-Bem-vindo ao desafio de Fullstack da O2 Inc.! Estamos felizes por você estar interessado em se juntar à nossa equipe. Este repositório contém todas as instruções e requisitos necessários para a conclusão do desafio. 
+This app is a stock management and dashboard. You can manage products, movement stock and access charts and reports.
 
-## Sobre a O2 Inc.
+## SETUP
 
-Estamos construindo uma nova área de tecnologia e engenharia na O2 Inc., focada em criar uma cultura de desenvolvimento colaborativo. Nosso objetivo é formar um time de engenharia onde cada membro esteja dedicado a se desenvolver, trazer ideias inovadoras e ter a oportunidade de crescer profissionalmente. Valorizamos a criatividade, a inovação e o aprendizado contínuo.
-
-## Sobre o Desafio
-
-O objetivo deste desafio é desenvolver um sistema de gestão de estoque que permita o cadastro de produtos, registro de movimentações de estoque e geração de relatórios. Queremos avaliar suas habilidades em design de aplicação, qualidade do código, arquitetura e documentação.
-
-## Tecnologias Requeridas
-
-- **Front-end:** React
-- **Back-end:** TypeScript, Python, Java ou a linguagem de sua preferência, desde que acompanhada de um README detalhado explicando o funcionamento da aplicação.
-- **Banco de Dados:** Banco de dados relacional (MySQL, PostgreSQL, etc.)
-- **Agente IA:** Um agente simples capaz de:
-  - Consultar o total de vendas em um determinado período
-  - Realizar cadastro de novas movimentações de estoque através de comandos em linguagem natural
-
-## Visualização de Dados
-
-O sistema deve incluir visualizações básicas dos dados de estoque, como:
-- Gráfico de barras mostrando o valor total de vendas por período
-- Resumo do valor total em estoque (R$)
-- Quantidade total de itens vendidos
-- Dashboard simples com os produtos mais movimentados
-
-## Processo de Submissão
-
-1. Faça um fork deste repositório.
-2. Implemente a solução conforme descrito no arquivo [DESAFIO.md](https://github.com/O2-Tech/o2-fullstack-challange/blob/main/DESAFIO.md).
-3. Garanta que todas as dependências e instruções de configuração estejam claramente documentadas.
-4. Envie o link do seu repositório forkado para avaliação.
-
-## Dúvidas?
-
-Se você tiver qualquer dúvida durante o processo de implementação, sinta-se à vontade para entrar em contato comigo através do [LinkedIn](https://www.linkedin.com/in/jgabrielfreitas/).
-
-## Boa sorte!
-
-Estamos ansiosos para ver seu trabalho e discutir seu potencial para se juntar à nossa equipe. 
-Boa sorte!
+See README files in frontend and backend folders. You will need Node, Docker, and a Google AI Studio API Key to run this project.

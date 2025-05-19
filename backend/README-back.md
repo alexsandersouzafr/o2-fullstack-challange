@@ -1,73 +1,75 @@
-# Guia de Inicialização do Backend
+# Backend Setup Guide
 
-Configuração do backend do Dashboard, desenvolvido com **NestJS**, **Gemini API**, **PrismaORM** e **PostgreSQL** .
+Configuration for the Dashboard backend, built with **NestJS**, **Gemini API**, **PrismaORM**, and **PostgreSQL**.
 
-## Pré-requisitos
+## Prerequisites
 
-- **Node.js**: Versão 18.x ou superior. Verifique com `node -v`.
-- **Docker**: Instalado e em execução no computador.
+- **Node.js**: Version 18.x or higher. Check with `node -v`.
+- **Docker**: Installed and running.
 
-## Configuração
+## Setup
 
-Siga os passos abaixo a partir da raiz do repositório:
+Follow these steps from the repository root:
 
-1. **Navegar ao Diretório do Backend**  
-   Acesse a pasta do backend:
+1. **Navigate to Backend Directory**  
+   Enter the backend folder:
 
    ```bash
    cd backend
    ```
 
-2. **Iniciar o Container PostgreSQL**  
-   Com o Docker aberto no computador, inicie o container do banco de dados:
+2. **Start PostgreSQL Container**  
+   With Docker running, start the database container:
 
    ```bash
    docker-compose up
    ```
 
-   _Nota_: O container pode demorar alguns minutos para ficar pronto e o banco de dados PostgreSQL estar disponível. Verifique os logs no terminal para confirmar.
+   _Note_: The container may take a few minutes to be ready and the PostgreSQL database to be available. Check terminal logs to confirm.
 
-3. **Instalar Dependências**  
-   Instale as dependências do projeto:
+3. **Install Dependencies**  
+   Install project dependencies:
 
    ```bash
    npm i
    ```
 
-4. **Configurar Variáveis de Ambiente**  
-   Renomeie o arquivo de exemplo para `.env`:
+4. **Configure Environment Variables**  
+   Rename the example file to `.env`:
 
    ```bash
    mv .env.example .env
    ```
 
-   No arquivo `.env`, insira a chave `GEMINI_API_KEY`, obtida no [Google AI Studio](https://aistudio.google.com/app/apikey). Verifique se outras variáveis, como `DATABASE_URL`, estão corretas.
+   In the `.env` file, add the `GEMINI_API_KEY` obtained from [Google AI Studio](https://aistudio.google.com/app/apikey). Verify other variables, like `DATABASE_URL`, are correct.
 
-5. **Executar Migrações do Banco de Dados**  
-   Com o container PostgreSQL ativo, aplique as migrações do Prisma:
+5. **Run Database Migrations**  
+   With the PostgreSQL container active, apply Prisma migrations:
 
    ```bash
    npx prisma migrate dev
    ```
 
-6. **(Opcional) Popular o Banco de Dados**  
-   Execute o script de seed para preencher o banco com dados iniciais:
+6. **(Optional) Seed Database**  
+   Run the seed script to populate the database with initial data:
 
    ```bash
    npm run seed
    ```
 
-7. **Construir a Aplicação**  
-   Gere a build do backend:
+7. **Build Application**  
+   Generate the backend build:
 
    ```bash
    nest build
    ```
 
-8. **Iniciar o Backend**  
-   Rode a aplicação:
+8. **Start Backend**  
+   Run the application:
+
    ```bash
    node dist/src/main
    ```
-9. **Documentação da API pelo Swagger**  
-   Acesse http://localhost:3000/api
+
+9. **API Documentation via Swagger**  
+   Access http://localhost:3000/api

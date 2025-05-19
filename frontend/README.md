@@ -1,37 +1,37 @@
-# Guia de Inicialização do Dashboard
+# Dashboard Setup Guide
 
-Frontend do Dashboard, construído com Vite, React, TypeScript, TanStack Router, TanStack Query, shadcn/ui e Tailwind CSS.
+Frontend for the Dashboard, built with Vite, React, TypeScript, TanStack Router, TanStack Query, shadcn/ui, and Tailwind CSS.
 
-## Pré-requisitos
+## Prerequisites
 
 - Node.js 18.x+
-- Backend em execução
+- Backend running
 
-## Configuração
+## Setup
 
-Na raiz do repositório, execute:
+From the repository root, run:
 
-1. Navegar ao frontend:
+1. Navigate to frontend:
    ```bash
    cd frontend
    ```
-2. Instalar dependências:
+2. Install dependencies:
    ```bash
    npm i --force
    ```
-3. Configurar .env:
+3. Configure .env:
    ```bash
    mv .env.example .env
    ```
-4. Construir projeto:
+4. Build project:
    ```bash
    npm run build
    ```
-5. Iniciar preview:
+5. Start preview:
    ```bash
    npm run preview
    ```
 
-## Acesso
+## Access
 
-Acesse: **http://localhost:4173**
+Visit: **http://localhost:4173**
